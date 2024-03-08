@@ -1,24 +1,32 @@
+import path from "path";
 const express = require("express");
 const dbconnect = require('./db/db_connect');
-
-const app = express();
-
-// it is used to import data from .env file
+import cookieParser from "cookie-parser";
+import { app, server } from "./Socket/Socket.js";
+import authRoutes from "./routes/Auth.js";
+import messageRoutes from "./routes/message.routes.js";
+import userRoutes from "./routes/user.routes.js";
 require('dotenv').config();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
+app.use(express.json());
+app.use(cookieParser());
+
+app.use("/api/auth", authRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/users", userRoutes);
 
 
-// start server on Port
-app.listen(PORT, () => {
-    console.log(`Server successfully started at ${PORT}`);
+
+const __dirname = path.resolve();
+
+app.use(express.static(path.join(__dirname, "/frontend/build")));
+
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
 });
 
-// connnecting database
-dbconnect();
-
-// default route
-app.use("/", (req, res) => {
-    res.send('<h1> This is homepage baby</h1>');
+server.listen(PORT, () => {
+	dbconnect();
+	console.log(`Server Running on port ${PORT}`);
 });
-
 
