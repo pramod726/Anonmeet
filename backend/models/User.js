@@ -1,8 +1,13 @@
-import mongoose from "mongoose";
+import {mongoose } from "mongoose";
 
 const userSchema = new mongoose.Schema(
 	{
 		username: {
+			type: String,
+			required: true,
+			unique: true,
+		},
+		email: {
 			type: String,
 			required: true,
 			unique: true,
@@ -21,6 +26,28 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			default: "",
 		},
+		followers: [
+			{
+				type: String,
+			}
+		],
+		following: [
+			{
+				type: String,
+			}
+		],
+		communities: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+                ref: "Community",
+			}
+		],
+		saved: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+                ref: "Post",
+			}
+		]
 		
 	},
 	{ timestamps: true }
