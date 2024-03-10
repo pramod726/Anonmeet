@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import { app, server } from "./Socket/Socket.js";
 import authRoutes from "./routes/Auth.js";
+import postRoutes from "./routes/Post.js";
 // import messageRoutes from "./routes/message.routes.js";
 // import userRoutes from "./routes/user.routes.js";
 import dotenv from 'dotenv';
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/post", postRoutes);
 // app.use("/api/messages", messageRoutes);
 // app.use("/api/users", userRoutes);
 
