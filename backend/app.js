@@ -1,19 +1,25 @@
 import path from "path";
-const express = require("express");
-const dbconnect = require('./db/db_connect');
+import express from "express";
+import dbconnect from "./db/db_connect.js";
 import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
 import { app, server } from "./Socket/Socket.js";
 import authRoutes from "./routes/Auth.js";
-import messageRoutes from "./routes/message.routes.js";
-import userRoutes from "./routes/user.routes.js";
-require('dotenv').config();
+import postRoutes from "./routes/Post.js";
+// import messageRoutes from "./routes/message.routes.js";
+// import userRoutes from "./routes/user.routes.js";
+import dotenv from 'dotenv';
+dotenv.config();
+
 const PORT = process.env.PORT || 4000;
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/messages", messageRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/post", postRoutes);
+// app.use("/api/messages", messageRoutes);
+// app.use("/api/users", userRoutes);
 
 
 

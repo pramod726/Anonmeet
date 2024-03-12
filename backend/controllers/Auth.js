@@ -1,19 +1,27 @@
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import User from "../models/User.js";
-import generateTokenAndSetCookie from "../utils/generateToken.js";
+// import generateTokenAndSetCookie from "../utils/generateToken.js";
 
 export const signup = async (req, res) => {
 	try {
-		const {  username, password, confirmPassword, gender } = req.body;
+		const { username, email, password, confirmPassword, gender } = req.body;
+		// console.log(req.body);
 
-		if (password !== confirmPassword) {
-			return res.status(400).json({ error: "Passwords don't match" });
+		
+		const checkuser = await User.findOne({email});
+		
+		if(checkuser){
+			return res.status(400).json({ error: "User already exists" });
 		}
-
+		
 		const user = await User.findOne({ username });
-
+		
 		if (user) {
 			return res.status(400).json({ error: "Username already exists" });
+		}
+		
+		if (password !== confirmPassword) {
+			return res.status(400).json({ error: "Passwords don't match" });
 		}
 
 		// HASH PASSWORD HERE
@@ -27,13 +35,14 @@ export const signup = async (req, res) => {
 
 		const newUser = new User({
 			username,
+			email,
 			password: hashedPassword,
 			gender,
 			profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
 		});
 
 		if (newUser) {
-			generateTokenAndSetCookie(newUser._id, res);
+			// generateTokenAndSetCookie(newUser._id, res);
 			await newUser.save();
 
 			res.status(201).json({
@@ -60,7 +69,7 @@ export const login = async (req, res) => {
 			return res.status(400).json({ error: "Invalid username or password" });
 		}
 
-		generateTokenAndSetCookie(user._id, res);
+		// generateTokenAndSetCookie(user._id, res);
 
 		res.status(200).json({
 			_id: user._id,
