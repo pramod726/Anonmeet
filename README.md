@@ -1,6 +1,6 @@
-# INNODEV 2K24
+# AVISKAR 2K24
 
-## Project Name: ANONMEET (OPEN THEME)
+## Project Name: ANONMEET (Anonymous social networking site)
 
 ## Byteme
 
