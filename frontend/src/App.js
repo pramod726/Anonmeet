@@ -4,14 +4,20 @@ import Navbar from './component/Navbar/Navbar';
 import SignUp from './component/Auth/SignUp';
 import Login from './component/Auth/Login';
 import Sidebar from './component/Sidebar';
+import Main from './component/MainContent/Main';
 
 export default function App() {
   return (
     <Router>
-      <div>
+      <div className="flex flex-col h-screen">
         <Navbar />
-        <div className='bg-red-500'>
-          <Sidebar/>
+        <div className="flex justify-between overflow-hidden bg-black">
+          <div>
+            <Sidebar />
+          </div>
+          <div className="overflow-y-auto flex-1">
+            <Main />
+          </div>
         </div>
         <Routes>
           <Route path="/login" element={<Login />} />
