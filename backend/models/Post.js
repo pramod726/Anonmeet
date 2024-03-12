@@ -14,6 +14,10 @@ const postSchema = new mongoose.Schema(
 		body: {
 			type: String,
 		},
+		score: {
+			type: Number,
+			required: true,
+		},
 		upvotes: {
 			type: Number,
 			default: 0,
@@ -21,19 +25,7 @@ const postSchema = new mongoose.Schema(
 		downvotes: {
 			type: Number,
             default: 0,
-		},
-        votes: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Vote",
-            }
-        ],
-        comments: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Comment",
-            }
-        ]
+		}
 	},
 	{ timestamps: true }
 );

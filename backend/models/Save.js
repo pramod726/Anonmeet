@@ -1,6 +1,6 @@
 import {mongoose } from "mongoose";
 
-const voteSchema = new mongoose.Schema(
+const saveSchema = new mongoose.Schema(
 	{
 		username: {
 			type: mongoose.Schema.Types.ObjectId,              
@@ -11,16 +11,11 @@ const voteSchema = new mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,                
 			ref: "User",
             required: true
-		},
-		vote: {
-			type: Number,
-			required: true,
-            enum: [1,-1]
-		},
+		}
 	},
 	{ timestamps: true }
 );
 
-const Vote = mongoose.model("Vote", voteSchema);
+const Save = mongoose.model("Save", saveSchema);
 
-export default Vote;
+export default Save;
