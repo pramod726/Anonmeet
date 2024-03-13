@@ -12,11 +12,11 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="bg-black h-screen w-72 pl-8 pt-4  border-r-[1px] border-[#808080]">
+    <div className="bg-black h-screen w-72 pl-8 pt-4  border-r-[1px] border-[#9c9c9c40]">
       <ul className="text-white">
         <li
-          className={`p-3 mx-4 mb-1 hover:bg-[#808080] cursor-pointer rounded-xl ${
-            selectedItem === 'Home' && 'bg-[#808080]'
+          className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer rounded-xl ${
+            selectedItem === 'Home' && 'bg-[#2b2b2e]'
           }`}
           onClick={() => handleItemClick('Home')}
         >
@@ -25,8 +25,8 @@ const Sidebar = () => {
           </div>
         </li>
         <li
-          className={`p-3 mx-4 mb-1 hover:bg-[#808080] cursor-pointer  rounded-xl ${
-            selectedItem === 'Hot' && 'bg-[#808080]'
+          className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer  rounded-xl ${
+            selectedItem === 'Hot' && 'bg-[#2b2b2e]'
           }`}
           onClick={() => handleItemClick('Hot')}
         >
@@ -35,8 +35,8 @@ const Sidebar = () => {
         </div>
         </li>
         <li
-          className={`p-3 mx-4 mb-1 hover:bg-[#808080] cursor-pointer  rounded-xl ${
-            selectedItem === 'Top' && 'bg-[#808080]'
+          className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer  rounded-xl ${
+            selectedItem === 'Top' && 'bg-[#2b2b2e]'
           }`}
           onClick={() => handleItemClick('Top')}
         > 
@@ -45,8 +45,8 @@ const Sidebar = () => {
           </div>
         </li>
         <li
-          className={`p-3 mx-4 mb-1 hover:bg-[#808080] cursor-pointer rounded-xl ${
-            selectedItem === 'New' && 'bg-[#808080]'
+          className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer rounded-xl ${
+            selectedItem === 'New' && 'bg-[#2b2b2e]'
           }`}
           onClick={() => handleItemClick('New')}
         >
