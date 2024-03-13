@@ -1,4 +1,4 @@
-import {useState,React} from 'react';
+import {React} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -9,10 +9,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Modal from '@mui/material/Modal';
-import LoginModal from './Login';
 
-function SignUp({ open, handleClose }) {
-  const [loginOpen, setLoginOpen] = useState(false);
+function SignUp({ open, handleClose,onLoginClick }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -22,15 +20,6 @@ function SignUp({ open, handleClose }) {
       password: data.get('password'),
     });
     handleClose();
-  };
-
-  const handleLoginOpen = () => {
-    handleClose();
-    setLoginOpen(true);
-  };
-
-  const handleLoginClose = () => {
-    setLoginOpen(false);
   };
 
   return (
@@ -105,7 +94,7 @@ function SignUp({ open, handleClose }) {
               <Grid item>
                 <div className='flex items-center mx-2'>
                   <p className='mr-1'>Already Sign up?</p>
-                  <Link href="/login" onClick={handleLoginOpen}>
+                  <Link onClick={onLoginClick} className='cursor-pointer'>
                     {"Login"}
                   </Link>
                 </div>
@@ -115,7 +104,6 @@ function SignUp({ open, handleClose }) {
         </Box>
       </Container>
     </Modal>
-    {loginOpen && <LoginModal open={loginOpen} handleClose={handleLoginClose} />}
     </>
   );
 }

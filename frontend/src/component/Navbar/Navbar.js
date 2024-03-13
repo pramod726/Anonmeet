@@ -2,21 +2,31 @@ import React, { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import LoginModal from '../Auth/Login';
+import SignUpModal from '../Auth/SignUp';
 
 const Navbar = () => {
   const [loginOpen, setLoginOpen] = useState(false);
+  const [signupOpen, setSignupOpen] = useState(false);
 
   const handleLoginOpen = () => {
+    setSignupOpen(false);
     setLoginOpen(true);
   };
 
   const handleLoginClose = () => {
     setLoginOpen(false);
   };
+  const handleSignupOpen = () => {
+    setLoginOpen(false);
+    setSignupOpen(true);
+  };
 
+  const handleSignupClose = () => {
+    setSignupOpen(false);
+  };
   return (
     <>
-      <nav className="bg-black p-4 flex justify-between items-center sticky top-0 z-50 border-b-[1px] border-[#9c9c9c40]">
+      <nav className="bg-black p-2 flex justify-between items-center sticky top-0 z-50 border-b-[1px] border-[#9c9c9c40]">
         {/* Logo */}
         <Link to="/">
           <div className="flex items-center mx-8">
@@ -48,7 +58,8 @@ const Navbar = () => {
           <div className='w-10 bg-red-400 rounded-3xl mx-6'></div>
         </div>
       </nav>
-      {(<LoginModal open={loginOpen} handleClose={handleLoginClose} />)}
+      {loginOpen && <LoginModal open={loginOpen} handleClose={handleLoginClose} onSignupClick={handleSignupOpen}/>}
+      {signupOpen && <SignUpModal open={signupOpen} handleClose={handleSignupClose} onLoginClick={handleLoginOpen}/>}
     </>
   );
 };

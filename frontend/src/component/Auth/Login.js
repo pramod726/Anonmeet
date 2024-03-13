@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,10 +11,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
-import SignUpModal from './SignUp';
 
-function Login({ open, handleClose }) {
-  const [signupOpen, setSignupOpen] = useState(false);
+function Login({ open, handleClose,onSignupClick }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -24,15 +22,6 @@ function Login({ open, handleClose }) {
       password: data.get('password'),
     });
     handleClose();
-  };
-
-  const handleSignupOpen = () => {
-    setSignupOpen(true);
-    handleClose();
-  };
-
-  const handleSignupClose = () => {
-    setSignupOpen(false);
   };
 
   return (
@@ -99,7 +88,7 @@ function Login({ open, handleClose }) {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link  variant="body2" onClick={handleSignupOpen} className='cursor-pointer'>
+                  <Link  variant="body2" onClick={onSignupClick} className='cursor-pointer'>
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
@@ -108,7 +97,6 @@ function Login({ open, handleClose }) {
           </Box>
         </Container>
       </Modal>
-      <SignUpModal open={signupOpen} handleClose={handleSignupClose} />
     </ThemeProvider>
   );
 }

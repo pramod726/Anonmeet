@@ -16,7 +16,7 @@ const Sidebar = () => {
       <ul className="text-white">
         <li
           className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer rounded-xl ${
-            selectedItem === 'Home' && 'bg-[#2b2b2e]'
+            selectedItem === 'Home' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
           }`}
           onClick={() => handleItemClick('Home')}
         >
@@ -26,7 +26,7 @@ const Sidebar = () => {
         </li>
         <li
           className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer  rounded-xl ${
-            selectedItem === 'Hot' && 'bg-[#2b2b2e]'
+            selectedItem === 'Hot' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
           }`}
           onClick={() => handleItemClick('Hot')}
         >
@@ -36,7 +36,7 @@ const Sidebar = () => {
         </li>
         <li
           className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer  rounded-xl ${
-            selectedItem === 'Top' && 'bg-[#2b2b2e]'
+            selectedItem === 'Top' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
           }`}
           onClick={() => handleItemClick('Top')}
         > 
@@ -46,7 +46,7 @@ const Sidebar = () => {
         </li>
         <li
           className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer rounded-xl ${
-            selectedItem === 'New' && 'bg-[#2b2b2e]'
+            selectedItem === 'New' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
           }`}
           onClick={() => handleItemClick('New')}
         >
