@@ -6,8 +6,10 @@ import bodyParser from "body-parser";
 import { app, server } from "./Socket/Socket.js";
 import authRoutes from "./routes/Auth.js";
 import postRoutes from "./routes/Post.js";
-// import messageRoutes from "./routes/message.routes.js";
-// import userRoutes from "./routes/user.routes.js";
+import messageRoutes from "./routes/Message.js"
+import userRoutes from "./routes/User.js"
+
+const {cloudinaryConnect} = require("./db/Cloudinary.js")
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -16,10 +18,11 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+cloudinaryConnect();
 app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
-// app.use("/api/messages", messageRoutes);
-// app.use("/api/users", userRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/users", userRoutes);
 
 
 
