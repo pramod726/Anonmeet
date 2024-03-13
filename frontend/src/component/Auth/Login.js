@@ -28,7 +28,15 @@ function Copyright(props) {
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
-const defaultTheme = createTheme();
+// const defaultTheme = createTheme();
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+      default: '#121212', // Dark background color
+    },
+  },
+});
 
 export default function Login() {
   const handleSubmit = (event) => {
@@ -41,7 +49,7 @@ export default function Login() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={darkTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -50,6 +58,7 @@ export default function Login() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            minHeight: '100vh',
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -105,7 +114,6 @@ export default function Login() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );
