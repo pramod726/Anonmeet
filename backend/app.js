@@ -8,8 +8,9 @@ import authRoutes from "./routes/Auth.js";
 import postRoutes from "./routes/Post.js";
 import messageRoutes from "./routes/Message.js"
 import userRoutes from "./routes/User.js"
+import cors from "cors"
 
-const {cloudinaryConnect} = require("./db/Cloudinary.js")
+// const {cloudinaryConnect} = require("./db/Cloudinary.js")
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -17,8 +18,9 @@ const PORT = process.env.PORT || 4000;
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(cors());
 
-cloudinaryConnect();
+// cloudinaryConnect();
 app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/messages", messageRoutes);
