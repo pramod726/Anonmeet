@@ -22,7 +22,7 @@ export const getUsersForSidebar = async (req, res) => {
 
 export const getallposts = async (req, res) => {
   try {
-    const userid = req.userid;
+    const userid = req.user._id;
 
     const posts = await Post.find({username: userid}).sort({createdAt:-1});
 
@@ -36,7 +36,7 @@ export const getallposts = async (req, res) => {
 
 export const getallcomments = async (req, res) => {
   try {
-    const userid = req.userid;
+    const userid = req.user._id;
 
     const comments = await Comment.find({username: userid}).sort({createdAt:-1});
 
@@ -49,7 +49,7 @@ export const getallcomments = async (req, res) => {
 
 export const getallsaved = async (req, res) => {
   try {
-    const userid = req.userid;
+    const userid = req.user._id;
 
     const posts = await Save.find({username: userid}).sort({createdAt:-1});
 
@@ -63,7 +63,7 @@ export const getallsaved = async (req, res) => {
 
 export const getallupvotes = async (req, res) => {
   try {
-    const userid = req.userid;
+    const userid = req.user._id;
 
     const posts = await Vote.find({username: userid, vote: 1}).sort({createdAt:-1});
 
@@ -76,7 +76,7 @@ export const getallupvotes = async (req, res) => {
 
 export const getalldownvotes = async (req, res) => {
   try {
-    const userid = req.userid;
+    const userid = req.user._id;
 
     const posts = await Vote.find({username: userid, vote: -1}).sort({createdAt:-1});
 

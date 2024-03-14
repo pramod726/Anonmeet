@@ -16,7 +16,7 @@ import { FaRegCommentAlt } from "react-icons/fa";
 import { LuBookmark } from "react-icons/lu";
 
 
-export default function RecipeReviewCard() {
+export default function RecipeReviewCard(post) {
 
 
   return (
@@ -32,15 +32,13 @@ export default function RecipeReviewCard() {
         //     <MoreVertIcon />
         //   </IconButton>
         // }
-        title={<Typography variant="h8" color="white">Shrimp and Chorizo Paella</Typography>}
-        subheader={<Typography variant="subtitle2" color="white">September 14, 2016</Typography>}
+        title={<Typography variant="h8" color="white">{post.username}</Typography>}
+        subheader={<Typography variant="subtitle2" color="white">{post.createdAt}</Typography>}
       />
-      <CardContent>
-        <Typography variant="h6" color="white">Shrimp and Chorizo Paella</Typography>
+      <CardContent className='pt-2'>
+        <Typography variant="h8" color="white" >{post.title}</Typography>
         <Typography variant="body2" color="grey">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the mussels,
-          if you like.
+          {post.body}
         </Typography>
       </CardContent>
       {/* <CardMedia
@@ -55,7 +53,7 @@ export default function RecipeReviewCard() {
             <IconButton aria-label="Upvote">
               <TbArrowBigUp  color='#fff' size={18}/>
             </IconButton>
-            <div className='items-center py-1 text-cyan-50'> 45</div>
+            <div className='items-center py-1 text-cyan-50'>{post.upvotes - post.downvotes}</div>
             <IconButton aria-label="Downvote">
               <TbArrowBigDown color='#fff' size={18}/>
             </IconButton>

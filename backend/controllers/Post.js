@@ -63,17 +63,20 @@ export const top = async (req, res) => {
 
 export const create = async (req,res) => {
     try{
-        const {username, title, body } = req.body;
+        const {title, body } = req.body;
+        const userid = req.user._id; 
         if(!title){
             return res.status(400).json({ error: "Title cannot be empty!" });
         }
 
-        const user = await User.findOne({_id:username});
+        const user = await User.findOne({_id:userid});
         if(!user){
             return res.status(400).json({ error: "User does not exist." });
         }
         const date = new Date();
         const score = hotScore(60, 40, date.getTime());
+
+        const username = userid;
 
         const post = await Post.create({
             username,
@@ -99,8 +102,8 @@ export const create = async (req,res) => {
 export const deletepost = async (req, res) => {
     try{
         const id = req.params.id;
-        const user = req.userid;        // id of username
-        const post = await Post.deleteOne({_id: id, username:user});
+        const userid = req.user._id;        // id of username
+        const post = await Post.deleteOne({_id: id, username:userid});
         if(!post){
             return res.status(400).json({ error: "Post doesn't exist." });
         }
@@ -146,7 +149,7 @@ export const getpost = async (req, res) => {
 export const comment = async (req, res) => {
     try{
         const id = req.params.id;
-        const userid = req.userid;
+        const userid = req.user._id;
         const {text} = req.body;
         const post = await Post.findOne({_id: id});
         if(!post){
@@ -176,7 +179,7 @@ export const deletecomment = async (req, res) => {
     try{
         const postid = req.params.id1;
         const commentid = req.params.id2;
-        const userid = req.userid;
+        const userid = req.user._id;
         const comment = await Comment.findOne({_id: commentid, post: postid, username: userid});
         if(!comment){
             return res.status(400).json({ error: "Comment doesn't exist." });
@@ -196,7 +199,7 @@ export const deletecomment = async (req, res) => {
 export const castvote = async (req, res) => {
     try{
         const postid = req.params.id;
-        const userid = req.userid;
+        const userid = req.user._id;
         const {vote} = req.body;
         const user = await User.findOne({_id: userid});
         if(!user){
@@ -208,7 +211,7 @@ export const castvote = async (req, res) => {
         }
 
 
-        const alreadyvoted = await Vote.find({username: userid, post: postid});
+        const alreadyvoted = await Vote.findOne({username: userid, post: postid});
 
         if(alreadyvoted){
             if(alreadyvoted.vote === 1){
@@ -227,26 +230,29 @@ export const castvote = async (req, res) => {
             post.score = hotScore(post.upvotes, post.downvotes, post.createdAt.getTime());
             await post.save();
             res.status(201).json(alreadyvoted);
+        }else{
+
+            const newvote = new Vote({
+                username: userid,
+                post: postid,
+                vote: vote,
+            });
+
+            await newvote.save();
+
+            if(vote === 1){
+                post.upvotes += 1;
+            }else if(vote === -1){
+                post.downvotes += 1;
+            }
+
+            post.score = hotScore(post.upvotes, post.downvotes, post.createdAt.getTime());
+
+            await post.save();
+
+            res.status(201).json(newvote);
+
         }
-
-
-        const newvote = await Vote.create({
-            post: postid,
-            username: userid,
-            vote: vote,
-        });
-
-        if(vote === 1){
-            post.upvotes += 1;
-        }else if(vote === -1){
-            post.downvotes += 1;
-        }
-
-        post.score = hotScore(post.upvotes, post.downvotes, post.createdAt.getTime());
-
-        await post.save();
-
-        res.status(201).json(newvote);
 
     }catch (error){
         console.log("Error in signup controller", error.message);
@@ -258,7 +264,7 @@ export const castvote = async (req, res) => {
 export const deletevote = async (req, res) => {
     try{
         const postid = req.params.id;
-        const userid = req.userid;
+        const userid = req.user._id;
         const {vote} = req.body;
         const user = await User.findOne({_id: userid});
         if(!user){
@@ -268,7 +274,7 @@ export const deletevote = async (req, res) => {
         if(!post){
             return res.status(400).json({ error: "Post doesn't exist." });
         }
-        const alreadyvoted = await Vote.find({username: userid, post: postid});
+        const alreadyvoted = await Vote.deleteOne({username: userid, post: postid});
         if(!alreadyvoted){
             return res.status(400).json({ error: "Vote doesn't exist." });
         }
@@ -299,7 +305,7 @@ export const createreply = async (req, res) => {
     try{
         const postid = req.params.id1;
         const commentid = req.params.id2;
-        const userid = req.userid;
+        const userid = req.user._id;
         const {text} = req.body;
         const post = await Post.findOne({_id: postid});
         if(!post){
@@ -332,8 +338,7 @@ export const deletereply = async (req, res) => {
         const postid = req.params.id1;
         const commentid = req.params.id2;
         const replyid = req.params.id3;
-        const userid = req.userid;
-        const {text} = req.body;
+        const userid = req.user._id;
         const post = await Post.findOne({_id: postid});
         if(!post){
             return res.status(400).json({ error: "Post doesn't exist." });
@@ -365,7 +370,7 @@ export const deletereply = async (req, res) => {
 export const savepost = async (req, res) => {
     try{
         const postid = req.params.id;
-        const userid = req.userid;
+        const userid = req.user._id;
         const post = await Post.findOne({_id: postid});
         if(!post){
             return res.status(400).json({ error: "Post doesn't exist." });
@@ -388,7 +393,7 @@ export const savepost = async (req, res) => {
 export const deletesavepost = async (req, res) => {
     try{
         const postid = req.params.id;
-        const userid = req.userid;
+        const userid = req.user._id;
         const post = await Post.findOne({_id: postid});
         if(!post){
             return res.status(400).json({ error: "Post doesn't exist." });

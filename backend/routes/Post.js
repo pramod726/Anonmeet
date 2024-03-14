@@ -1,5 +1,6 @@
 import express from "express";
-import { comment, create, deletecomment, deletepost, getpost, hot, newsort, top } from "../controllers/Post.js";
+import { castvote, comment, create, createreply, deletecomment, deletepost, deletereply, deletesavepost, deletevote, getpost, hot, newsort, savepost, top } from "../controllers/Post.js";
+import protectRoute from "../middlewares/RouteProtector.js";
 
 const router = express.Router();
 
@@ -7,12 +8,21 @@ router.get("/hot", hot);
 router.get("/top", top);
 router.get("/new", newsort);
 
-router.post("/create", create);
-router.post("/:id/comment", comment);
-router.get("/:id", getpost);
+router.post("/create", protectRoute, create);
+router.get("/:id", protectRoute, getpost);
 
-router.delete("/:id", deletepost);
-router.delete("/:id1/:id2", deletecomment);
+router.post("/:id/vote", protectRoute, castvote);
+router.delete("/:id/vote", protectRoute, deletevote);
+router.post("/:id/comment", protectRoute, comment);
+
+router.post("/:id/save", protectRoute, savepost);
+router.delete("/:id/deletesave", protectRoute, deletesavepost);
+
+router.delete("/:id", protectRoute, deletepost);
+router.delete("/:id1/:id2", protectRoute, deletecomment);
+
+router.post("/:id1/:id2", protectRoute, createreply);
+router.delete("/:id1/:id2/:id3", protectRoute, deletereply);
 
 
 export default router;
