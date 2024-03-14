@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import {React, useState } from 'react';
 import { FaHome, FaFire, FaRegThumbsUp, FaClock } from 'react-icons/fa';
 
-const Sidebar = () => {
-  // State to manage the selected sidebar item
-  const [selectedItem, setSelectedItem] = useState('Home');
 
-  // Function to handle click on sidebar items
-  const handleItemClick = (itemName) => {
+const Sidebar = ({handleItemClick}) => {
+
+  const [selectedItem, setSelectedItem] = useState('hot');
+
+
+  const handleItemClickInternal = (itemName) => {
     setSelectedItem(itemName);
     // Perform any additional actions here, such as navigation or updating state
+
+    handleItemClick(itemName);
+    
   };
 
   return (
@@ -18,7 +22,7 @@ const Sidebar = () => {
           className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer rounded-xl ${
             selectedItem === 'Home' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
           }`}
-          onClick={() => handleItemClick('Home')}
+          onClick={() => handleItemClickInternal('hot')}
         >
             <div className='flex items-center'>
           <FaHome className="mx-4" size={20} /> Home
@@ -28,7 +32,7 @@ const Sidebar = () => {
           className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer  rounded-xl ${
             selectedItem === 'Hot' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
           }`}
-          onClick={() => handleItemClick('Hot')}
+          onClick={() => handleItemClickInternal('hot')}
         >
         <div className='flex items-center'>
           <FaFire className="mx-4" size={20}/> Hot
@@ -38,7 +42,7 @@ const Sidebar = () => {
           className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer  rounded-xl ${
             selectedItem === 'Top' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
           }`}
-          onClick={() => handleItemClick('Top')}
+          onClick={() => handleItemClickInternal('top')}
         > 
            <div className='flex items-center'>
           <FaRegThumbsUp className="mx-4" size={20}/> Top
@@ -48,13 +52,15 @@ const Sidebar = () => {
           className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer rounded-xl ${
             selectedItem === 'New' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
           }`}
-          onClick={() => handleItemClick('New')}
+          onClick={() => handleItemClickInternal('new')}
         >
             <div className='flex items-center'>
           <FaClock className="mx-4" size={20} /> New
           </div>
         </li>
       </ul>
+
+      {/* {selectedItem && <Main selectedItem={selectedItem} />} */}
     </div>
   );
 };

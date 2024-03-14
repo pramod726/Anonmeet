@@ -62,6 +62,7 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
 	try {
 		const { username, password } = req.body;
+		console.log(req.body);
 		const user = await User.findOne({ username });
 		const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
 
@@ -70,6 +71,8 @@ export const login = async (req, res) => {
 		}
 
 		generateTokenAndSetCookie(user._id, res);
+
+		// console.log(user);
 
 		res.status(200).json({
 			_id: user._id,

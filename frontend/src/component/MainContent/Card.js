@@ -16,15 +16,20 @@ import { FaRegCommentAlt } from "react-icons/fa";
 import { LuBookmark } from "react-icons/lu";
 
 
-export default function RecipeReviewCard(post) {
+export default function RecipeReviewCard({post}) {
 
+  const utcdate = new Date(post.createdAt);
+
+  const istDate = new Date(utcdate.getTime() + (5.5 * 60 * 60 * 1000)); // Adding 5 hours and 30 minutes
+
+  const istDateString = istDate.toISOString();
 
   return (
     <Card sx={{ maxWidth: 760, backgroundColor: '#202020' }}> {/* Setting dark background color */}
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
+          <Avatar aria-label="recipe">
+            <img src={post.username.profilePic} onError={(e) => { e.target.onerror = null; e.target.src = 'fallback-image-url.jpg' }} />
           </Avatar>
         }
         // action={
@@ -32,7 +37,7 @@ export default function RecipeReviewCard(post) {
         //     <MoreVertIcon />
         //   </IconButton>
         // }
-        title={<Typography variant="h8" color="white">{post.username}</Typography>}
+        title={<Typography variant="h8" color="white">{post.username.username}</Typography>}
         subheader={<Typography variant="subtitle2" color="white">{post.createdAt}</Typography>}
       />
       <CardContent className='pt-2'>

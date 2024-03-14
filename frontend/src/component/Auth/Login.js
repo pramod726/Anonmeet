@@ -11,16 +11,38 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
+import axios from "axios";
 
 function Login({ open, handleClose,onSignupClick }) {
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get('username'),
-      password: data.get('password'),
-    });
+    
+    const username = data.get('username');
+    const password = data.get('password');
+    
+    try {
+      const response = await axios.post ("http://localhost:8000/api/auth/login", {
+        username, 
+        password
+      });
+      console.log(response);
+      
+    } catch(error) {
+        console.log("Error in submitting Form:", error);
+
+        if (error.response) {
+            console.error('Response Data:', error.response.data);
+            console.error('Response Status:', error.response.status);
+          } else if (error.request) {
+            // The request was made, but no response was received
+            console.error('No response received. Request:', error.request);
+          } else {
+            // Something happened in setting up the request that triggered an error
+            console.error('Error during request setup:', error.message);
+          }
+    }
     handleClose();
   };
 

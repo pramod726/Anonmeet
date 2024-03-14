@@ -26,8 +26,11 @@ function hotScore(upvotes, downvotes, time) {
 
 export const hot = async (req, res) => {
     try{
-        const posts = await Post.find().sort({score:-1}).limit(10);
+        const posts = await Post.find().sort({score:-1}).limit(10)
+        .populate("username", "username profilePic")
+        .select("-score");
 
+        console.log("Hot post sent");
         res.status(201).json(posts);
 
     } catch (error){
@@ -38,8 +41,11 @@ export const hot = async (req, res) => {
 
 export const newsort = async (req, res) => {
     try{
-        const posts = await Post.find().sort({createdAt:-1}).limit(10);
+        const posts = await Post.find().sort({createdAt:-1}).limit(10)
+        .populate("username", "username profilePic")
+        .select("-score");
 
+        console.log("New post sent");
         res.status(201).json(posts);
 
     } catch (error){
@@ -50,8 +56,11 @@ export const newsort = async (req, res) => {
 
 export const top = async (req, res) => {
     try{
-        const posts = await Post.find().sort({upvotes:-1}).limit(10);
+        const posts = await Post.find().sort({upvotes:-1}).limit(10)
+        .populate("username", "username profilePic")
+        .select("-score");
 
+        console.log("Top post sent");
         res.status(201).json(posts);
 
     } catch (error){
