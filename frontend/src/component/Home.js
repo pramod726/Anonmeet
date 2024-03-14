@@ -3,7 +3,7 @@ import Navbar from './Navbar/Navbar';
 import Sidebar from './Sidebar';
 import Main from './MainContent/Main';
 
-export default function App() {
+export default function Home() {
   return (
       <div className="flex flex-col h-screen">
         <Navbar />

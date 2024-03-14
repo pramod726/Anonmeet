@@ -1,7 +1,6 @@
-import * as React from 'react';
+import {React} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
@@ -9,24 +8,9 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Modal from '@mui/material/Modal';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Anonmeet
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-const defaultTheme = createTheme();
-
-export default function SignUp() {
+function SignUp({ open, handleClose,onLoginClick }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -35,19 +19,27 @@ export default function SignUp() {
       email: data.get('email'),
       password: data.get('password'),
     });
+    handleClose();
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="signup-modal-title"
+      aria-describedby="signup-modal-description"
+    >
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
         <Box
           sx={{
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            minHeight: '80vh',
+            bgcolor: 'white',
+            padding: '20px',
+            borderRadius: '8px',
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -57,7 +49,7 @@ export default function SignUp() {
             Sign up
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
+            <TextField
               margin="normal"
               required
               fullWidth
@@ -101,17 +93,19 @@ export default function SignUp() {
               </Grid>
               <Grid item>
                 <div className='flex items-center mx-2'>
-              <p className='mr-1'>Already Sign up?</p>
-                <Link href="/login">
-                  {"Login"}
-                </Link>
+                  <p className='mr-1'>Already Sign up?</p>
+                  <Link onClick={onLoginClick} className='cursor-pointer'>
+                    {"Login"}
+                  </Link>
                 </div>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        {/* <Copyright sx={{ mt: 4, mb: 2 }} /> */}
       </Container>
-    </ThemeProvider>
+    </Modal>
+    </>
   );
 }
+
+export default SignUp;
