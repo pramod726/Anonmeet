@@ -1,7 +1,7 @@
-import MessageContainer from "../Chat/MessageContainer";
+import MessageContainer from "./MessageContainer/MessageContainer";
 import Sidebar from "./Sidebar/Sidebar";
 
-const Home = () => {
+const ChatPage = () => {
 	return (
 		<div className='flex sm:h-[450px] md:h-[550px] rounded-lg overflow-hidden bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
 			<Sidebar />
@@ -9,4 +9,4 @@ const Home = () => {
 		</div>
 	);
 };
-export default Home;
+export default ChatPage;
