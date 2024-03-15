@@ -16,15 +16,25 @@ import { FaRegCommentAlt } from "react-icons/fa";
 import { LuBookmark } from "react-icons/lu";
 
 
-export default function RecipeReviewCard() {
+export default function RecipeReviewCard({ post }) {
 
+  const utcdate = new Date(post.createdAt);
+
+  const date = new Date(utcdate.getTime());
+  const currentDate = new Date();
+
+  const ageInMilliseconds = currentDate - date;
+  const ageInHours = Math.floor(ageInMilliseconds / (1000 * 60 * 60));
+  const ageInDays = Math.floor(ageInMilliseconds / (1000 * 60 * 60 * 24));
+
+  const createdAgo = ageInHours<24?ageInHours+" hr. ago":ageInDays+` ${ageInDays<=1?"day":"days"} ago`;
 
   return (
     <Card sx={{ maxWidth: 760, backgroundColor: '#202020' }}> {/* Setting dark background color */}
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
+          <Avatar aria-label="recipe">
+            <img src={post.username.profilePic} onError={(e) => { e.target.onerror = null; e.target.src = 'fallback-image-url.jpg' }} />
           </Avatar>
         }
         // action={
@@ -32,15 +42,13 @@ export default function RecipeReviewCard() {
         //     <MoreVertIcon />
         //   </IconButton>
         // }
-        title={<Typography variant="h8" color="white">Shrimp and Chorizo Paella</Typography>}
-        subheader={<Typography variant="subtitle2" color="white">September 14, 2016</Typography>}
+        title={<Typography variant="h8" color="white">{post.username.username}</Typography>}
+        subheader={<Typography variant="subtitle2" color="white">{createdAgo}</Typography>}
       />
-      <CardContent>
-        <Typography variant="h6" color="white">Shrimp and Chorizo Paella</Typography>
+      <CardContent className='pt-2'>
+        <Typography variant="h8" color="white" >{post.title}</Typography>
         <Typography variant="body2" color="grey">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the mussels,
-          if you like.
+          {post.body}
         </Typography>
       </CardContent>
       {/* <CardMedia
@@ -53,11 +61,11 @@ export default function RecipeReviewCard() {
         <div className='flex gap-1'>
           <div className='bg-[#2b2b2e] flex justify-around rounded-2xl p-0'>
             <IconButton aria-label="Upvote">
-              <TbArrowBigUp  color='#fff' size={18}/>
+              <TbArrowBigUp color='#fff' size={18} />
             </IconButton>
-            <div className='items-center py-1 text-cyan-50'> 45</div>
+            <div className='items-center py-1 text-cyan-50'>{post.upvotes - post.downvotes}</div>
             <IconButton aria-label="Downvote">
-              <TbArrowBigDown color='#fff' size={18}/>
+              <TbArrowBigDown color='#fff' size={18} />
             </IconButton>
           </div>
           <div className='bg-[#2b2b2e] flex justify-evenly rounded-2xl p-0'>
@@ -67,7 +75,7 @@ export default function RecipeReviewCard() {
             <div className='pr-2 items-center py-1 text-cyan-50'> 45</div>
           </div>
         </div>
-        <div  className=''>
+        <div className=''>
           <IconButton aria-label="Save">
             <LuBookmark color='#fff' size={18} />
           </IconButton>

@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
-// import generateTokenAndSetCookie from "../utils/generateToken.js";
+import generateTokenAndSetCookie from "../utils/generateToken.js";
 
 export const signup = async (req, res) => {
 	try {
-		const { username, email, password, confirmPassword, gender } = req.body;
+		const { username, email, password, confirmPassword} = req.body;
 		// console.log(req.body);
 
 		
@@ -30,19 +30,17 @@ export const signup = async (req, res) => {
 
 	
 
-		const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
-		const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
+		const profilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
 
 		const newUser = new User({
 			username,
 			email,
 			password: hashedPassword,
-			gender,
-			profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
+			profilePic,
 		});
 
 		if (newUser) {
-			// generateTokenAndSetCookie(newUser._id, res);
+			generateTokenAndSetCookie(newUser._id, res);
 			await newUser.save();
 
 			res.status(201).json({
@@ -54,7 +52,7 @@ export const signup = async (req, res) => {
 			res.status(400).json({ error: "Invalid user data" });
 		}
 	} catch (error) {
-		console.log("Error in signup controller", error.message);
+		console.log("Error in signup controller:", error.message);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
@@ -62,6 +60,7 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
 	try {
 		const { username, password } = req.body;
+		console.log(req.body);
 		const user = await User.findOne({ username });
 		const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
 
@@ -69,7 +68,9 @@ export const login = async (req, res) => {
 			return res.status(400).json({ error: "Invalid username or password" });
 		}
 
-		// generateTokenAndSetCookie(user._id, res);
+		generateTokenAndSetCookie(user._id, res);
+
+		// console.log(user);
 
 		res.status(200).json({
 			_id: user._id,

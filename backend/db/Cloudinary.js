@@ -1,4 +1,4 @@
-const cloudinary = require("cloudinary").v2;
+import cloudinary from "cloudinary";
 
 exports.cloudinaryConnect = () => {
   try {

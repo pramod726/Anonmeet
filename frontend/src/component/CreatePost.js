@@ -16,7 +16,6 @@ export default function CreatePost() {
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(formData.title.trim()!=''){
             console.log("post")
             const response = UseCreatePost(formData);
             console.log(response);
@@ -24,7 +23,6 @@ export default function CreatePost() {
                 title: '',
                 description: ''
             });
-        }
     };
     return (
         <div>

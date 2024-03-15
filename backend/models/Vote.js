@@ -9,7 +9,7 @@ const voteSchema = new mongoose.Schema(
 		},
         post: {
 			type: mongoose.Schema.Types.ObjectId,                
-			ref: "User",
+			ref: "Post",
             required: true
 		},
 		vote: {

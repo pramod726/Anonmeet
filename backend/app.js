@@ -7,14 +7,15 @@ import { app, server } from "./Socket/Socket.js";
 import authRoutes from "./routes/Auth.js";
 import postRoutes from "./routes/Post.js";
 import messageRoutes from "./routes/Message.js"
-import userRoutes from "./routes/User.js"
-import cors from "cors"
+import userRoutes from "./routes/User.js";
+import cors from "cors";
 
-// const {cloudinaryConnect} = require("./db/Cloudinary.js")
+// import {cloudinaryConnect} from "./db/Cloudinary.js";
 import dotenv from 'dotenv';
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
