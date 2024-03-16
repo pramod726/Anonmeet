@@ -50,8 +50,11 @@ export const sendMessage = async (req, res) => {
 
 export const getMessages = async (req, res) => {
 	try {
-		const { id: userToChatId , senderId : senderId } = req.params;
+		const { id: userToChatId } = req.params;
+		const senderId = req.query.senderId;
 		// const {senderId} = req.body;
+		console.log(userToChatId)
+		console.log(senderId)
 
 		const conversation = await Conversation.findOne({
 			participants: { $all: [senderId, userToChatId] },
@@ -60,6 +63,8 @@ export const getMessages = async (req, res) => {
 		if (!conversation) return res.status(200).json([]);
 
 		const messages = conversation.messages;
+		console.log("hello")
+		console.log(messages);
 
 		res.status(200).json(messages);
 	} catch (error) {
