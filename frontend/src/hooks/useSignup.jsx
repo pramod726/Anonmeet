@@ -4,7 +4,7 @@ import { useAuthContext } from "../ContextApis/AuthContext";
 
 const useSignup = () => {
     const [loading, setLoading] = useState(false);
-    const { setAuthUser } = useAuthContext(); // Destructure setAuthUser from useAuthContext
+    const { setAuthUser } = useAuthContext(); 
 
     const signup = async ({ username, email, password, confirmPassword }) => {
 
