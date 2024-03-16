@@ -8,6 +8,8 @@ const useGetMessages = () => {
 	const { messages, setMessages, selectedConversation } = useConversation();
 	const { authUser } = useAuthContext();
 	const senderId = authUser._id
+	console.log(senderId)
+	console.log(selectedConversation._id)
 
 	useEffect(() => {
 		const getMessages = async () => {
@@ -16,6 +18,7 @@ const useGetMessages = () => {
 				const res = await fetch(`http://localhost:8000/api/messages/${selectedConversation._id}?senderId=${senderId}`);
 				const data = await res.json();
 				if (data.error) throw new Error(data.error);
+				console.log(data);
 				setMessages(data);
 			} catch (error) {
 				toast.error(error.message);
