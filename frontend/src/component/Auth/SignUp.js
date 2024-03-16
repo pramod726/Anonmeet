@@ -1,4 +1,4 @@
-import {React} from 'react';
+import {React,useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -9,17 +9,47 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Modal from '@mui/material/Modal';
+import useSignup from '../../hooks/useSignup';
 
 function SignUp({ open, handleClose,onLoginClick }) {
-  const handleSubmit = (event) => {
+  const {signup} = useSignup(); 
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async(event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get('username'),
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    handleClose();
+    const username = data.get('username');
+    const email = data.get('email');
+    const password = data.get('password');
+    const confirmPassword = data.get('confirmPassword');
+    if (!username || !email || !password || !confirmPassword) {
+      setErrorMessage("Please fill in all fields");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+      return;
+    }
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+      return false;
+    }
+    if (password.length < 6) {
+      setErrorMessage("Password must be at least 6 characters");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+      return false;
+    }
+    try {
+      await signup({ username, email, password, confirmPassword });
+      handleClose();
+  } catch (error) {
+      setErrorMessage(error.message || "Signup failed");
+      console.log(error)
+  }
   };
 
   return (
@@ -48,6 +78,12 @@ function SignUp({ open, handleClose,onLoginClick }) {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
+          {/* Error message tag */}
+          {errorMessage && (
+              <Typography color="error" variant="body2" align="center">
+                {errorMessage}
+              </Typography>
+            )}
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -75,6 +111,16 @@ function SignUp({ open, handleClose,onLoginClick }) {
               label="Password"
               type="password"
               id="password"
+              autoComplete="current-password"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="confirmPassword"
+              label="Confirm Password"
+              type="text"
+              id="confirm-password"
               autoComplete="current-password"
             />
             <Button

@@ -13,7 +13,7 @@ const generatetoken = (userId) => {
 
 export const signup = async (req, res) => {
 	try {
-		const { username, email, password, confirmPassword, gender } = req.body;
+		const { username, email, password, confirmPassword} = req.body;
 		// console.log(req.body);
 
 		
@@ -39,15 +39,13 @@ export const signup = async (req, res) => {
 
 	
 
-		const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
-		const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
+		const profilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
 
 		const newUser = new User({
 			username,
 			email,
 			password: hashedPassword,
-			gender,
-			profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
+			profilePic,
 		});
 
 		if (newUser) {
@@ -63,7 +61,7 @@ export const signup = async (req, res) => {
 			res.status(400).json({ error: "Invalid user data" });
 		}
 	} catch (error) {
-		console.log("Error in signup controller", error.message);
+		console.log("Error in signup controller:", error.message);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };

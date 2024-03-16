@@ -16,13 +16,18 @@ import { FaRegCommentAlt } from "react-icons/fa";
 import { LuBookmark } from "react-icons/lu";
 
 
-export default function RecipeReviewCard({post}) {
+export default function RecipeReviewCard({ post }) {
 
   const utcdate = new Date(post.createdAt);
 
-  const istDate = new Date(utcdate.getTime() + (5.5 * 60 * 60 * 1000)); // Adding 5 hours and 30 minutes
+  const date = new Date(utcdate.getTime());
+  const currentDate = new Date();
 
-  const istDateString = istDate.toISOString();
+  const ageInMilliseconds = currentDate - date;
+  const ageInHours = Math.floor(ageInMilliseconds / (1000 * 60 * 60));
+  const ageInDays = Math.floor(ageInMilliseconds / (1000 * 60 * 60 * 24));
+
+  const createdAgo = ageInHours<24?ageInHours+" hr. ago":ageInDays+` ${ageInDays<=1?"day":"days"} ago`;
 
   return (
     <Card sx={{ maxWidth: 760, backgroundColor: '#202020' }}> {/* Setting dark background color */}
@@ -38,7 +43,7 @@ export default function RecipeReviewCard({post}) {
         //   </IconButton>
         // }
         title={<Typography variant="h8" color="white">{post.username}</Typography>}
-        subheader={<Typography variant="subtitle2" color="white">{post.createdAt}</Typography>}
+        subheader={<Typography variant="subtitle2" color="white">{createdAgo}</Typography>}
       />
       <CardContent className='pt-2'>
         <Typography variant="h8" color="white" >{post.title}</Typography>
@@ -70,7 +75,7 @@ export default function RecipeReviewCard({post}) {
             <div className='pr-2 items-center py-1 text-cyan-50 text-[14px]'>{post.comment}</div>
           </div>
         </div>
-        <div  className=''>
+        <div className=''>
           <IconButton aria-label="Save">
             <LuBookmark color='#fff' size={18} />
           </IconButton>

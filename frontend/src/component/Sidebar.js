@@ -4,15 +4,12 @@ import { FaHome, FaFire, FaRegThumbsUp, FaClock } from 'react-icons/fa';
 
 const Sidebar = ({handleItemClick}) => {
 
-  const [selectedItem, setSelectedItem] = useState('hot');
+  const [selectedItem, setSelectedItem] = useState('home');
 
 
   const handleItemClickInternal = (itemName) => {
     setSelectedItem(itemName);
-    // Perform any additional actions here, such as navigation or updating state
-
-    handleItemClick(itemName);
-    
+    handleItemClick(itemName==='home'?'hot':itemName);
   };
 
   return (
@@ -20,9 +17,9 @@ const Sidebar = ({handleItemClick}) => {
       <ul className="text-white">
         <li
           className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer rounded-xl ${
-            selectedItem === 'Home' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
+            selectedItem === 'home' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
           }`}
-          onClick={() => handleItemClickInternal('hot')}
+          onClick={() => handleItemClickInternal('home')}
         >
             <div className='flex items-center'>
           <FaHome className="mx-4" size={20} /> Home
@@ -30,7 +27,7 @@ const Sidebar = ({handleItemClick}) => {
         </li>
         <li
           className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer  rounded-xl ${
-            selectedItem === 'Hot' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
+            selectedItem === 'hot' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
           }`}
           onClick={() => handleItemClickInternal('hot')}
         >
@@ -40,7 +37,7 @@ const Sidebar = ({handleItemClick}) => {
         </li>
         <li
           className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer  rounded-xl ${
-            selectedItem === 'Top' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
+            selectedItem === 'top' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
           }`}
           onClick={() => handleItemClickInternal('top')}
         > 
@@ -50,7 +47,7 @@ const Sidebar = ({handleItemClick}) => {
         </li>
         <li
           className={`p-3 mx-4 mb-1 hover:bg-[#202020] cursor-pointer rounded-xl ${
-            selectedItem === 'New' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
+            selectedItem === 'new' && 'bg-[#2b2b2e] hover:bg-[#2b2b2e]'
           }`}
           onClick={() => handleItemClickInternal('new')}
         >
