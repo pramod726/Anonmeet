@@ -1,5 +1,4 @@
 import {React, useState, useEffect} from 'react';
-import axios from 'axios';
 import Card from "./Card.js";
 
 export default function Main({selectedItem}) {
@@ -11,10 +10,20 @@ export default function Main({selectedItem}) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`http://localhost:8000/api/post/${selectedItem}`);
+        const chatUser = JSON.parse(localStorage.getItem('chat-user'));
 
-        console.log(response);
-        setPosts(response.data);
+        const token = chatUser.token;
+        // console.log(chatUser.token);
+        const response = await fetch(`http://localhost:8000/api/post/${selectedItem}`, {
+          method: 'GET',
+          headers: {
+            'Authorisation': `Bearer ${token}`,
+          }
+        });
+
+        const data = await response.json();
+        console.log(data);
+        setPosts(data);
       } catch (error) {
         console.error('Error fetching posts:', error);
       }

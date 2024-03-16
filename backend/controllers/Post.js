@@ -23,15 +23,46 @@ function hotScore(upvotes, downvotes, time) {
     return score;
 }
 
+const data = async (posts, userid) =>{
+    const data = [];
+    for(var i = 0; i< posts.length ; i++){
+        const comment = await Comment.find({post:posts[i]._id});
+        const vote = await Vote.findOne({username: userid, post: posts[i]._id});
+        let uservote = 0;
+        if(vote){
+            uservote = vote.vote;
+        }
+        const post = {
+            _id: posts[i]._id,
+            user_id: posts[i].username._id,
+            username: posts[i].username.username,
+            profilePic: posts[i].username.profilePic,
+            title: posts[i].title,
+            body: posts[i].body,
+            votes: posts[i].upvotes - posts[i].downvotes,
+            comment: comment.length,
+            selfvote: uservote,
+            createdAt: posts[i].createdAt,
+        }
+
+        data.push(post);
+    }
+
+    return data;
+}
+
 
 export const hot = async (req, res) => {
     try{
+        const userid = req.user._id;
         const posts = await Post.find().sort({score:-1}).limit(10)
-        .populate("username", "username profilePic")
-        .select("-score");
+        .populate("username", "username profilePic");
+
+        const post = await data(posts, userid);
 
         console.log("Hot post sent");
-        res.status(201).json(posts);
+        // console.log(post);
+        res.status(201).json(post);
 
     } catch (error){
         console.log("Error : ", error.message);
@@ -41,12 +72,15 @@ export const hot = async (req, res) => {
 
 export const newsort = async (req, res) => {
     try{
+        const userid = req.user._id;
         const posts = await Post.find().sort({createdAt:-1}).limit(10)
         .populate("username", "username profilePic")
         .select("-score");
 
+        const post = await data(posts, userid);
+
         console.log("New post sent");
-        res.status(201).json(posts);
+        res.status(201).json(post);
 
     } catch (error){
         console.log("Error : ", error.message);
@@ -56,12 +90,15 @@ export const newsort = async (req, res) => {
 
 export const top = async (req, res) => {
     try{
+        const userid = req.user._id;
         const posts = await Post.find().sort({upvotes:-1}).limit(10)
         .populate("username", "username profilePic")
         .select("-score");
 
+        const post = await data(posts, userid);
+
         console.log("Top post sent");
-        res.status(201).json(posts);
+        res.status(201).json(post);
 
     } catch (error){
         console.log("Error : ", error.message);
