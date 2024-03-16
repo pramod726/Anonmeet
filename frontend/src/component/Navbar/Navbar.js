@@ -77,7 +77,7 @@ const Navbar = () => {
           <div className='w-10 bg-red-400 rounded-3xl mx-6'></div>
         </div>
       </nav>
-      {loginOpen && <LoginModal open={loginOpen} handleClose={handleLoginClose} onSignupClick={handleSignupOpen}/>}
+      {loginOpen && <LoginModal open={loginOpen} handleClose={handleLoginClose} onSignupClick={handleSignupOpen} handleSuccess={handleSignupSuccess}/>}
       {signupOpen && <SignUpModal open={signupOpen} handleClose={handleSignupClose} onLoginClick={handleLoginOpen}  handleSuccess={handleSignupSuccess}/>}
       {successMessage && (
         <div className='bg-green-500 text-white fixed bottom-10 right-10 p-4 rounded-md'>

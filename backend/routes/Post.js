@@ -4,9 +4,9 @@ import protectRoute from "../middlewares/RouteProtector.js";
 
 const router = express.Router();
 
-router.get("/hot", hot);
-router.get("/top", top);
-router.get("/new", newsort);
+router.get("/hot", protectRoute, hot);
+router.get("/top", protectRoute, top);
+router.get("/new", protectRoute, newsort);
 
 router.post("/create", protectRoute, create);
 router.get("/:id", protectRoute, getpost);

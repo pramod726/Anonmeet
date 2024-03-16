@@ -34,7 +34,7 @@ export default function RecipeReviewCard({ post }) {
       <CardHeader
         avatar={
           <Avatar aria-label="recipe">
-            <img src={post.username.profilePic} onError={(e) => { e.target.onerror = null; e.target.src = 'fallback-image-url.jpg' }} />
+            <img src={post.profilePic} onError={(e) => { e.target.onerror = null; e.target.src = 'fallback-image-url.jpg' }} />
           </Avatar>
         }
         // action={
@@ -42,7 +42,7 @@ export default function RecipeReviewCard({ post }) {
         //     <MoreVertIcon />
         //   </IconButton>
         // }
-        title={<Typography variant="h8" color="white">{post.username.username}</Typography>}
+        title={<Typography variant="h8" color="white">{post.username}</Typography>}
         subheader={<Typography variant="subtitle2" color="white">{createdAgo}</Typography>}
       />
       <CardContent className='pt-2'>
@@ -61,18 +61,18 @@ export default function RecipeReviewCard({ post }) {
         <div className='flex gap-1'>
           <div className='bg-[#2b2b2e] flex justify-around rounded-2xl p-0'>
             <IconButton aria-label="Upvote">
-              <TbArrowBigUp color='#fff' size={18} />
+              <TbArrowBigUp  color='#fff' size={16}/>
             </IconButton>
-            <div className='items-center py-1 text-cyan-50'>{post.upvotes - post.downvotes}</div>
+            <div className='items-center py-1 text-cyan-50 text-[14px]'>{post.votes}</div>
             <IconButton aria-label="Downvote">
-              <TbArrowBigDown color='#fff' size={18} />
+              <TbArrowBigDown color='#fff' size={16}/>
             </IconButton>
           </div>
           <div className='bg-[#2b2b2e] flex justify-evenly rounded-2xl p-0'>
             <IconButton aria-label="Comment">
-              <FaRegCommentAlt color='#fff' size={18} />
+              <FaRegCommentAlt color='#fff' size={16} />
             </IconButton>
-            <div className='pr-2 items-center py-1 text-cyan-50'> 45</div>
+            <div className='pr-2 items-center py-1 text-cyan-50 text-[14px]'>{post.comment}</div>
           </div>
         </div>
         <div className=''>

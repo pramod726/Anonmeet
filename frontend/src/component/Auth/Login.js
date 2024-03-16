@@ -1,4 +1,4 @@
-import React from 'react';
+import {React,useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,9 +11,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
-import axios from "axios";
+import useLogin from '../../hooks/useLogin';
 
-function Login({ open, handleClose,onSignupClick }) {
+function Login({ open, handleClose,onSignupClick,handleSuccess }) {
+  const {login} = useLogin();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async(event) => {
     event.preventDefault();
@@ -21,29 +23,22 @@ function Login({ open, handleClose,onSignupClick }) {
     
     const username = data.get('username');
     const password = data.get('password');
+    if (!username || !password) {
+      setErrorMessage("Please fill in all fields");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+      return;
+    }
     
     try {
-      const response = await axios.post ("http://localhost:8000/api/auth/login", {
-        username, 
-        password
-      });
-      console.log(response);
-      
+      await login({username, password});
+      handleClose();
+      handleSuccess("Login Successful")
     } catch(error) {
-        console.log("Error in submitting Form:", error);
-
-        if (error.response) {
-            console.error('Response Data:', error.response.data);
-            console.error('Response Status:', error.response.status);
-          } else if (error.request) {
-            // The request was made, but no response was received
-            console.error('No response received. Request:', error.request);
-          } else {
-            // Something happened in setting up the request that triggered an error
-            console.error('Error during request setup:', error.message);
-          }
+      setErrorMessage(error.message || "Login failed");
+      console.log(error)
     }
-    handleClose();
   };
 
   return (
@@ -73,7 +68,12 @@ function Login({ open, handleClose,onSignupClick }) {
             <Typography component="h1" variant="h5">
               Login
             </Typography>
-            
+            {/* Error message tag */}
+            {errorMessage && (
+              <Typography color="error" variant="body2" align="center">
+                {errorMessage}
+              </Typography>
+            )}
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1}}>
               <TextField
                 margin="normal"
