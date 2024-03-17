@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { FaSearch,FaComments } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { FaSearch, FaPlus, FaComments } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 import LoginModal from '../Auth/Login';
 import SignUpModal from '../Auth/SignUp';
 import { useAuthContext } from '../../ContextApis/AuthContext';
+import useLogout from '../../hooks/useLogout';
+import ProfileCard from './ProfileCard';
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const { authUser } = useAuthContext();
   const [loginOpen, setLoginOpen] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
-  const [user, setUser] = useState('');
-  const [curr, setCurr] = useState('Login');
+  const [profileCardOpen, setProfileCardOpen] = useState(false);
+  const profileCardRef = useRef(null);
+  const { logout } = useLogout();
 
   const handleLoginOpen = () => {
     setSignupOpen(false);
@@ -21,7 +25,7 @@ const Navbar = () => {
   const handleLoginClose = () => {
     setLoginOpen(false);
   };
-
+  
   const handleSignupOpen = () => {
     setLoginOpen(false);
     setSignupOpen(true);
@@ -31,32 +35,46 @@ const Navbar = () => {
     setSignupOpen(false);
   };
 
-  const handleSignupSuccess = (message) => {
-    setSuccessMessage(message);
-  };
-
   const handleToastClose = () => {
+    localStorage.removeItem('successMessage');
     setSuccessMessage('');
   };
 
-  useEffect(() => {
-    if (authUser && authUser.username) {
-      setUser(authUser.username);
-      setCurr('Logout');
-    } else {
-      setUser('');
-      setCurr('Login');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+      localStorage.setItem('successMessage', 'Logout Successfully');
+      window.location.reload();
+    } catch (error) {
+      localStorage.setItem('successMessage', 'Logout Failed');
+      window.location.reload();
     }
-  }, [authUser]);
+  }
 
   useEffect(() => {
-    if (successMessage) {
+    const storedMessage = localStorage.getItem('successMessage');
+    if (storedMessage) {
+      setSuccessMessage(storedMessage);
       const timer = setTimeout(() => {
         handleToastClose();
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [successMessage]);
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (profileCardRef.current && !profileCardRef.current.contains(event.target)) {
+        setProfileCardOpen(false);
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -79,38 +97,35 @@ const Navbar = () => {
           <label htmlFor="search" className="sr-only">Search</label>
         </div>
 
-        {/* Login Button */}
-        <div className='flex'>
-          <div>
-            <button
-              onClick={handleLoginOpen}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg"
-            >
-              {curr}
-            </button>
-          </div>
-          <div className='text-white font-bold px-4 py-2'>
-            <p>{user}</p>
-          </div>
-          {authUser && authUser.profilePic && (
-            <Link to="/profile">
-              <div className='h-10 w-10 rounded-full overflow-hidden mx-2'>
-                <img src={authUser.profilePic} alt="Profile" className='w-full h-full object-cover' />
-              </div>
+        {authUser ? (
+          <div className='flex items-center relative'>
+            <Link to="/post" className="text-white mx-2">
+              <FaPlus className="inline-block mr-1" /> Create Post
             </Link>
-          )}
-          {authUser && (
-            
             <Link to="/chat" className="text-white mx-2">
-              <FaComments className='h-10 w-10' />
+              <FaComments className="inline-block mr-1" /> Chat
             </Link>
-            
-          )}
-          {/* <div className='w-10 bg-red-400 rounded-3xl mx-6'></div> */}
-        </div>
+            <div>
+              <img src={authUser.profilePic} alt="Profile" className="w-10 h-10 rounded-full mx-4 cursor-pointer" onClick={() => setProfileCardOpen(!profileCardOpen)} ref={profileCardRef} />
+              {profileCardOpen && <ProfileCard handleLogout={handleLogout} />}
+            </div>
+          </div>
+        ) : (
+          <div className='flex'>
+            <div>
+              <button
+                onClick={handleLoginOpen}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg"
+              >
+                Login
+              </button>
+            </div>
+            <div className='w-10 bg-red-400 rounded-3xl mx-6'></div>
+          </div>
+        )}
       </nav>
-      {loginOpen && <LoginModal open={loginOpen} handleClose={handleLoginClose} onSignupClick={handleSignupOpen} handleSuccess={handleSignupSuccess}/>}
-      {signupOpen && <SignUpModal open={signupOpen} handleClose={handleSignupClose} onLoginClick={handleLoginOpen} handleSuccess={handleSignupSuccess}/>}
+      {loginOpen && <LoginModal open={loginOpen} handleClose={handleLoginClose} onSignupClick={handleSignupOpen}/>}
+      {signupOpen && <SignUpModal open={signupOpen} handleClose={handleSignupClose} onLoginClick={handleLoginOpen}/>}
       {successMessage && (
         <div className='bg-green-500 text-white fixed bottom-10 right-10 p-4 rounded-md'>
           {successMessage}

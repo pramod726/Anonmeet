@@ -40,6 +40,7 @@ const data = async (posts, userid) =>{
             profilePic: posts[i].username.profilePic,
             title: posts[i].title,
             body: posts[i].body,
+            imgurl: posts[i].image,
             votes: posts[i].upvotes - posts[i].downvotes,
             comment: comment.length,
             selfvote: uservote,
@@ -151,6 +152,8 @@ export const create = async (req, res) => {
         const { title, body } = req.body;
         const userid = req.user._id;
 
+        // console.log(req);
+
         // Validating if title is provided
         if (!title) {
             return res.status(400).json({ error: "Title cannot be empty!" });
@@ -165,17 +168,24 @@ export const create = async (req, res) => {
         // Uploading image to Cloudinary if provided
         let imageUrl = ''; // Initialize imageUrl
 
-        if (req.file) {
-            // Upload the image to Cloudinary
-            const cloudinaryResponse = await uploadImageToCloudinary(req.file, process.env.FOLDER_NAME); // Assuming req.file contains the image file
-            imageUrl = cloudinaryResponse.secure_url; // Get the secure URL of the uploaded image
-        }
+        // if (req.files) {
+        //     console.log(req.files);
+        //     // Upload the image to Cloudinary
+        //     const cloudinaryResponse = await uploadImageToCloudinary(req.files, process.env.FOLDER_NAME); // Assuming req.file contains the image file
+        //     imageUrl = cloudinaryResponse.secure_url; // Get the secure URL of the uploaded image
+        // }
+
+        console.log(imageUrl);
+
+        const date = new Date();
+        const score = hotScore(60, 40, date.getTime());
 
         // Creating a new post instance
         const post = await Post.create({
             username: userid,
             title,
             body,
+            score,
             imageUrl, // Assigning the Cloudinary image URL to the imageUrl field
         });
 
@@ -296,6 +306,7 @@ export const castvote = async (req, res) => {
         const postid = req.params.id;
         const userid = req.user._id;
         const {vote} = req.body;
+        console.log(vote);
         const user = await User.findOne({_id: userid});
         if(!user){
             return res.status(400).json({ error: "User does not exist." });
@@ -350,7 +361,7 @@ export const castvote = async (req, res) => {
         }
 
     }catch (error){
-        console.log("Error in signup controller", error.message);
+        console.log("Error in castvote controller", error.message);
 		res.status(500).json({ error: "Internal Server Error" });
     }
 }

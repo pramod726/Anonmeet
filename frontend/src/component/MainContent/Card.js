@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { React, useState} from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -17,6 +17,37 @@ import { LuBookmark } from "react-icons/lu";
 
 
 export default function RecipeReviewCard({ post }) {
+
+  const [votes, setVotes] = useState(post.votes);
+
+  const handleVote = async (voteType) => {
+    try {
+      const chatUser = JSON.parse(localStorage.getItem('chat-user'));
+      const token = chatUser.token;
+
+      const response = await fetch(`http://localhost:8000/api/post/${post._id}/vote`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorisation': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          vote: voteType
+        })
+      });
+  
+      if (!response.ok) {
+        const errorMessage = await response.json();
+        throw new Error(errorMessage.message);
+      }
+  
+      // If vote successful, update the state or handle response accordingly
+    } catch (error) {
+      console.error("Error : ", error);
+    }
+  };
+
+
 
   const utcdate = new Date(post.createdAt);
 
@@ -54,18 +85,18 @@ export default function RecipeReviewCard({ post }) {
       {/* <CardMedia
         component="img"
         height="194"
-        image="https://picsum.photos/200/"
+        image={post.imgurl}
         alt="Paella dish"
       /> */}
       <CardActions className='flex justify-between mx-1' >
         <div className='flex gap-1'>
           <div className='bg-[#2b2b2e] flex justify-around rounded-2xl p-0'>
-            <IconButton aria-label="Upvote">
-              <TbArrowBigUp  color='#fff' size={16}/>
+            <IconButton aria-label="Upvote" onClick={() => handleVote(1)}>
+              <TbArrowBigUp  color={post.selfvote === 1 ? 'green' : '#fff'} size={16}/>
             </IconButton>
             <div className='items-center py-1 text-cyan-50 text-[14px]'>{post.votes}</div>
-            <IconButton aria-label="Downvote">
-              <TbArrowBigDown color='#fff' size={16}/>
+            <IconButton aria-label="Downvote" onClick={() => handleVote(-1)}>
+              <TbArrowBigDown color={post.selfvote === -1 ? 'red' : '#fff'} size={16}/>
             </IconButton>
           </div>
           <div className='bg-[#2b2b2e] flex justify-evenly rounded-2xl p-0'>

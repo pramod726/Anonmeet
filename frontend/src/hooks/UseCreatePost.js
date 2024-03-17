@@ -18,9 +18,12 @@ const UseCreatePost = async (data) => {
   }
 
   try {
+    const chatUser = JSON.parse(localStorage.getItem('chat-user'));
+    const token = chatUser.token;
     const response = await axios.post(`${serverUrl}${createPostUrl}`, formData, {
       headers: {
-        "Content-Type": "multipart/form-data"
+        "Content-Type": "multipart/form-data",
+        'Authorisation': `Bearer ${token}`,
       }
     });
     return response.data;
