@@ -25,7 +25,10 @@ const postSchema = new mongoose.Schema(
 		downvotes: {
 			type: Number,
             default: 0,
-		}
+		},
+		image: {
+			type: String,
+		},
 	},
 	{ timestamps: true }
 );
