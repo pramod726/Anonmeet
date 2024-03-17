@@ -167,7 +167,7 @@ export const create = async (req, res) => {
 
         if (req.file) {
             // Upload the image to Cloudinary
-            const cloudinaryResponse = await uploadImageToCloudinary(req.file); // Assuming req.file contains the image file
+            const cloudinaryResponse = await uploadImageToCloudinary(req.file, process.env.FOLDER_NAME); // Assuming req.file contains the image file
             imageUrl = cloudinaryResponse.secure_url; // Get the secure URL of the uploaded image
         }
 
