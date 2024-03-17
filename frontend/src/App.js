@@ -14,6 +14,7 @@ export default function App() {
           <Route path="/post" element={<CreatePost/>} />
           <Route path="/chat" element={<ChatPage/>} />
           <Route path="/profile" element={<Profile/>} />
+          {/* <Route exact path="/reset-password/:token" component={ResetPassword} /> */}
         </Routes>
     </Router>
   );

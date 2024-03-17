@@ -36,11 +36,11 @@ export default function Main({selectedItem}) {
   return (
     <div className='ml-20 mt-3'>
 
-      {posts && posts.map(post => (
+      {/* {posts && posts.map(post => (
         <div className='mt-3' key={post._id}>
           <Card post={post} />
         </div>
-      ))}
+      ))} */}
 
     </div>
   )
