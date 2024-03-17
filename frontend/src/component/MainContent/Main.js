@@ -11,8 +11,8 @@ export default function Main({selectedItem}) {
     async function fetchData() {
       try {
         const chatUser = JSON.parse(localStorage.getItem('chat-user'));
-
         const token = chatUser.token;
+        
         // console.log(chatUser.token);
         const response = await fetch(`http://localhost:8000/api/post/${selectedItem}`, {
           method: 'GET',

@@ -247,6 +247,7 @@ export const castvote = async (req, res) => {
         const postid = req.params.id;
         const userid = req.user._id;
         const {vote} = req.body;
+        console.log(vote);
         const user = await User.findOne({_id: userid});
         if(!user){
             return res.status(400).json({ error: "User does not exist." });
@@ -301,7 +302,7 @@ export const castvote = async (req, res) => {
         }
 
     }catch (error){
-        console.log("Error in signup controller", error.message);
+        console.log("Error in castvote controller", error.message);
 		res.status(500).json({ error: "Internal Server Error" });
     }
 }
