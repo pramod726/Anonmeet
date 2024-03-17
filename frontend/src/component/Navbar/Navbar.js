@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch,FaComments } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import LoginModal from '../Auth/Login';
 import SignUpModal from '../Auth/SignUp';
@@ -93,9 +93,18 @@ const Navbar = () => {
             <p>{user}</p>
           </div>
           {authUser && authUser.profilePic && (
-            <div className='h-10 w-10 rounded-full overflow-hidden mx-2'>
-              <img src={authUser.profilePic} alt="Profile" className='w-full h-full object-cover' />
-            </div>
+            <Link to="/profile">
+              <div className='h-10 w-10 rounded-full overflow-hidden mx-2'>
+                <img src={authUser.profilePic} alt="Profile" className='w-full h-full object-cover' />
+              </div>
+            </Link>
+          )}
+          {authUser && (
+            
+            <Link to="/chat" className="text-white mx-2">
+              <FaComments className='h-10 w-10' />
+            </Link>
+            
           )}
           {/* <div className='w-10 bg-red-400 rounded-3xl mx-6'></div> */}
         </div>
