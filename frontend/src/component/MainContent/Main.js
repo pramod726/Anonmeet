@@ -2,10 +2,9 @@ import { React, useState, useEffect } from "react";
 import Card from "./Card.js";
 import { Link } from "react-router-dom";
 
-export default function Main({ selectedItem }) {
+export default function Main({selectedItem}) {
   const [posts, setPosts] = useState([]);
 
-  // console.log(selectedItem);
 
   useEffect(() => {
     async function fetchData() {

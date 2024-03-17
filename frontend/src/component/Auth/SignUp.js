@@ -11,7 +11,7 @@ import Container from '@mui/material/Container';
 import Modal from '@mui/material/Modal';
 import useSignup from '../../hooks/useSignup';
 
-function SignUp({ open, handleClose, onLoginClick,handleSuccess }) {
+function SignUp({ open, handleClose, onLoginClick}) {
   const { signup } = useSignup();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -44,7 +44,7 @@ function SignUp({ open, handleClose, onLoginClick,handleSuccess }) {
     try {
       await signup({ username, email, password, confirmPassword });
       handleClose();
-      handleSuccess("Signup Successful")
+      localStorage.setItem('successMessage', 'Signup Successfully');
     } catch (error) {
       setTimeout(() => {
         setErrorMessage(error.message || "Signup failed");

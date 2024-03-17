@@ -12,8 +12,10 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
 import useLogin from '../../hooks/useLogin';
+import { useNavigate } from 'react-router-dom';
 
-function Login({ open, handleClose,onSignupClick,handleSuccess }) {
+function Login({ open, handleClose,onSignupClick,}) {
+  const navigate = useNavigate();
   const {login} = useLogin();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -34,7 +36,9 @@ function Login({ open, handleClose,onSignupClick,handleSuccess }) {
     try {
       await login({username, password});
       handleClose();
-      handleSuccess("Login Successful")
+      navigate('/');
+      window.location.reload();
+      localStorage.setItem('successMessage', 'Login Successfully');
     } catch(error) {
       setErrorMessage(error.message || "Login failed");
       console.log(error)

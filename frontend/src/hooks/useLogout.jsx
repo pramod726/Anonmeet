@@ -9,7 +9,7 @@ const useLogout = () => {
 	const logout = async () => {
 		setLoading(true);
 		try {
-			const res = await fetch("/api/auth/logout", {
+			const res = await fetch("http://localhost:8000/api/auth/logout", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 			});
@@ -17,11 +17,10 @@ const useLogout = () => {
 			if (data.error) {
 				throw new Error(data.error);
 			}
-
 			localStorage.removeItem("chat-user");
 			setAuthUser(null);
 		} catch (error) {
-			toast.error(error.message);
+			throw new Error(error);
 		} finally {
 			setLoading(false);
 		}
