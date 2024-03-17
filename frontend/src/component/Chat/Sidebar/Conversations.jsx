@@ -1,9 +1,16 @@
 import useGetConversations from "../../../hooks/useGetConversations";
 import { getRandomEmoji } from "../../../utils/emojis";
 import Conversation from "./Conversation";
+import { useAuthContext } from "../../../ContextApis/AuthContext";
 
 const Conversations = () => {
-	const { loading, conversations } = useGetConversations();
+	const {authUser} = useAuthContext();
+	const username = authUser.username
+
+	let { loading, conversations } = useGetConversations();
+	const filteredConversations = conversations.filter(conversation => conversation.username !== username);
+	conversations = filteredConversations
+
 	console.log(conversations);
 	return (
 		<div className='py-2 flex flex-col overflow-auto'>

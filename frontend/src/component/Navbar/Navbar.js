@@ -1,13 +1,17 @@
-import React, { useState,useEffect } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaSearch,FaComments } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import LoginModal from '../Auth/Login';
 import SignUpModal from '../Auth/SignUp';
+import { useAuthContext } from '../../ContextApis/AuthContext';
 
 const Navbar = () => {
+  const { authUser } = useAuthContext();
   const [loginOpen, setLoginOpen] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [user, setUser] = useState('');
+  const [curr, setCurr] = useState('Login');
 
   const handleLoginOpen = () => {
     setSignupOpen(false);
@@ -17,6 +21,7 @@ const Navbar = () => {
   const handleLoginClose = () => {
     setLoginOpen(false);
   };
+
   const handleSignupOpen = () => {
     setLoginOpen(false);
     setSignupOpen(true);
@@ -25,6 +30,7 @@ const Navbar = () => {
   const handleSignupClose = () => {
     setSignupOpen(false);
   };
+
   const handleSignupSuccess = (message) => {
     setSuccessMessage(message);
   };
@@ -34,11 +40,20 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    if (authUser && authUser.username) {
+      setUser(authUser.username);
+      setCurr('Logout');
+    } else {
+      setUser('');
+      setCurr('Login');
+    }
+  }, [authUser]);
+
+  useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => {
         handleToastClose();
       }, 2000);
-
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
@@ -71,14 +86,31 @@ const Navbar = () => {
               onClick={handleLoginOpen}
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg"
             >
-              Login
+              {curr}
             </button>
           </div>
-          <div className='w-10 bg-red-400 rounded-3xl mx-6'></div>
+          <div className='text-white font-bold px-4 py-2'>
+            <p>{user}</p>
+          </div>
+          {authUser && authUser.profilePic && (
+            <Link to="/profile">
+              <div className='h-10 w-10 rounded-full overflow-hidden mx-2'>
+                <img src={authUser.profilePic} alt="Profile" className='w-full h-full object-cover' />
+              </div>
+            </Link>
+          )}
+          {authUser && (
+            
+            <Link to="/chat" className="text-white mx-2">
+              <FaComments className='h-10 w-10' />
+            </Link>
+            
+          )}
+          {/* <div className='w-10 bg-red-400 rounded-3xl mx-6'></div> */}
         </div>
       </nav>
       {loginOpen && <LoginModal open={loginOpen} handleClose={handleLoginClose} onSignupClick={handleSignupOpen} handleSuccess={handleSignupSuccess}/>}
-      {signupOpen && <SignUpModal open={signupOpen} handleClose={handleSignupClose} onLoginClick={handleLoginOpen}  handleSuccess={handleSignupSuccess}/>}
+      {signupOpen && <SignUpModal open={signupOpen} handleClose={handleSignupClose} onLoginClick={handleLoginOpen} handleSuccess={handleSignupSuccess}/>}
       {successMessage && (
         <div className='bg-green-500 text-white fixed bottom-10 right-10 p-4 rounded-md'>
           {successMessage}

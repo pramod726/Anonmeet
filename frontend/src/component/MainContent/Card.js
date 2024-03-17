@@ -85,18 +85,18 @@ export default function RecipeReviewCard({ post }) {
       {/* <CardMedia
         component="img"
         height="194"
-        image="https://picsum.photos/200/"
+        image={post.imgurl}
         alt="Paella dish"
       /> */}
       <CardActions className='flex justify-between mx-1' >
         <div className='flex gap-1'>
           <div className='bg-[#2b2b2e] flex justify-around rounded-2xl p-0'>
             <IconButton aria-label="Upvote" onClick={() => handleVote(1)}>
-              <TbArrowBigUp  color={post.vote === 1 ? 'green' : '#fff'} size={16}/>
+              <TbArrowBigUp  color={post.selfvote === 1 ? 'green' : '#fff'} size={16}/>
             </IconButton>
             <div className='items-center py-1 text-cyan-50 text-[14px]'>{post.votes}</div>
             <IconButton aria-label="Downvote" onClick={() => handleVote(-1)}>
-              <TbArrowBigDown color={post.vote === -1 ? 'red' : '#fff'} size={16}/>
+              <TbArrowBigDown color={post.selfvote === -1 ? 'red' : '#fff'} size={16}/>
             </IconButton>
           </div>
           <div className='bg-[#2b2b2e] flex justify-evenly rounded-2xl p-0'>

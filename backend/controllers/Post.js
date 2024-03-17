@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import Post from "../models/Post.js";
 import Comment from "../models/Comment.js";
+import { uploadImageToCloudinary } from "../utils/imageUpload.js";
 import Reply from "../models/Reply.js";
 import Vote from "../models/Vote.js";
 import Save from "../models/Save.js";
@@ -39,6 +40,7 @@ const data = async (posts, userid) =>{
             profilePic: posts[i].username.profilePic,
             title: posts[i].title,
             body: posts[i].body,
+            imgurl: posts[i].image,
             votes: posts[i].upvotes - posts[i].downvotes,
             comment: comment.length,
             selfvote: uservote,
@@ -107,41 +109,98 @@ export const top = async (req, res) => {
 }
 
 
-export const create = async (req,res) => {
-    try{
-        const {title, body } = req.body;
-        const userid = req.user._id; 
-        if(!title){
+// export const create = async (req,res) => {
+//     try{
+//         const {title, body } = req.body;
+//         const userid = req.user._id; 
+//         if(!title){
+//             return res.status(400).json({ error: "Title cannot be empty!" });
+//         }
+
+//         const user = await User.findOne({_id:userid});
+//         if(!user){
+//             return res.status(400).json({ error: "User does not exist." });
+//         }
+//         const date = new Date();
+//         const score = hotScore(60, 40, date.getTime());
+
+//         const username = userid;
+
+//         const post = await Post.create({
+//             username,
+//             title,
+//             body,
+//             score,
+//         });
+
+//         res.status(201).json({
+//             username: username,
+//             title: title,
+//             body: body,
+//             score: score
+//         });
+
+
+//     } catch (error){
+//         console.log("Error in signup controller", error.message);
+// 		res.status(500).json({ error: "Internal Server Error" });
+//     }
+// }
+export const create = async (req, res) => {
+    try {
+        // Extracting necessary data from the request body
+        const { title, body } = req.body;
+        const userid = req.user._id;
+
+        // console.log(req);
+
+        // Validating if title is provided
+        if (!title) {
             return res.status(400).json({ error: "Title cannot be empty!" });
         }
 
-        const user = await User.findOne({_id:userid});
-        if(!user){
+        // Finding the user by their ID
+        const user = await User.findOne({ _id: userid });
+        if (!user) {
             return res.status(400).json({ error: "User does not exist." });
         }
+
+        // Uploading image to Cloudinary if provided
+        let imageUrl = ''; // Initialize imageUrl
+
+        if (req.files) {
+            console.log(req.files);
+            // Upload the image to Cloudinary
+            const cloudinaryResponse = await uploadImageToCloudinary(req.files, process.env.FOLDER_NAME); // Assuming req.file contains the image file
+            imageUrl = cloudinaryResponse.secure_url; // Get the secure URL of the uploaded image
+        }
+
+        console.log(imageUrl);
+
         const date = new Date();
         const score = hotScore(60, 40, date.getTime());
 
-        const username = userid;
-
+        // Creating a new post instance
         const post = await Post.create({
-            username,
+            username: userid,
             title,
             body,
             score,
+            imageUrl, // Assigning the Cloudinary image URL to the imageUrl field
         });
 
+        // Returning the newly created post details
         res.status(201).json({
-            username: username,
-            title: title,
-            body: body,
-            score: score
+            username: userid,
+            title,
+            body,
+            imageUrl,
+            score: post.score // Assuming score is calculated elsewhere in your code
         });
 
-
-    } catch (error){
-        console.log("Error in signup controller", error.message);
-		res.status(500).json({ error: "Internal Server Error" });
+    } catch (error) {
+        console.log("Error in creating post:", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 }
 

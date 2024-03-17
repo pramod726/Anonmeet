@@ -1,6 +1,6 @@
 import {React, useState } from 'react';
 import { FaHome, FaFire, FaRegThumbsUp, FaClock } from 'react-icons/fa';
-
+import { Link } from 'react-router-dom';
 
 const Sidebar = ({handleItemClick}) => {
 
@@ -56,6 +56,13 @@ const Sidebar = ({handleItemClick}) => {
           </div>
         </li>
       </ul>
+      <div className="mx-6 my-2">
+        <Link to="/post">
+        <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg">
+          Create New Post +
+        </button>
+        </Link>
+      </div>
 
       {/* {selectedItem && <Main selectedItem={selectedItem} />} */}
     </div>
