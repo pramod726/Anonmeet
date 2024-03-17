@@ -1,6 +1,6 @@
-import cloudinary from "cloudinary";
+import cloudinary from 'cloudinary';
 
-exports.cloudinaryConnect = () => {
+export async function cloudinaryConnect (){
   try {
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,
