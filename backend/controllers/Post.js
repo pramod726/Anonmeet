@@ -168,12 +168,12 @@ export const create = async (req, res) => {
         // Uploading image to Cloudinary if provided
         let imageUrl = ''; // Initialize imageUrl
 
-        if (req.files) {
-            console.log(req.files);
-            // Upload the image to Cloudinary
-            const cloudinaryResponse = await uploadImageToCloudinary(req.files, process.env.FOLDER_NAME); // Assuming req.file contains the image file
-            imageUrl = cloudinaryResponse.secure_url; // Get the secure URL of the uploaded image
-        }
+        // if (req.files) {
+        //     console.log(req.files);
+        //     // Upload the image to Cloudinary
+        //     const cloudinaryResponse = await uploadImageToCloudinary(req.files, process.env.FOLDER_NAME); // Assuming req.file contains the image file
+        //     imageUrl = cloudinaryResponse.secure_url; // Get the secure URL of the uploaded image
+        // }
 
         console.log(imageUrl);
 

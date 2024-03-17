@@ -4,7 +4,7 @@ import { getUsersForSidebar, getallcomments, getallposts, getallsaved, getallupv
 
 const router = express.Router();
 
-router.get("/", protectRoute, getUsersForSidebar);
+router.get("/", getUsersForSidebar);
 router.get("/post", protectRoute, getallposts);
 router.get("/comment",protectRoute, getallcomments);
 router.get("/saved", protectRoute, getallsaved);
