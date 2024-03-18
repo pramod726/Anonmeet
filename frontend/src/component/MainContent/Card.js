@@ -4,6 +4,7 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
+import CardMedia from '@mui/material/CardMedia';
 import { Avatar, IconButton, Typography } from '@mui/material';
 import { TbArrowBigUp, TbArrowBigDown } from "react-icons/tb";
 import { FaRegCommentAlt } from "react-icons/fa";
@@ -136,6 +137,11 @@ export default function RecipeReviewCard({ post }) {
             {post.body}
           </Typography>
         </CardContent>
+      {post.imgurl &&<CardMedia
+        component="img"
+        height="194"
+        image={post.imgurl}
+      />}
     </Link>
         <CardActions className='flex justify-between mx-1'>
           <div className='flex gap-1'>
