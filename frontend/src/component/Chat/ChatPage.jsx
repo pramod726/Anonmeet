@@ -5,6 +5,7 @@ import { IoLogoSnapchat } from "react-icons/io";
 
 const ChatPage = () => {
   return (
+    
     <div className="flex flex-col justify-center items-center h-screen bg-gray-900">
       <div className="flex my-6 items-center justify-center">
         <h1 className="font-bold text-white text-2xl mx-4">Chat With Randoms </h1>

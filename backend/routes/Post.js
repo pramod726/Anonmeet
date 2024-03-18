@@ -2,13 +2,15 @@ import express from "express";
 import { castvote, comment, create, createreply, deletecomment, deletepost, deletereply, deletesavepost, deletevote, getpost, hot, newsort, savepost, top } from "../controllers/Post.js";
 import protectRoute from "../middlewares/RouteProtector.js";
 
+
+
 const router = express.Router();
 
 router.get("/hot", protectRoute, hot);
 router.get("/top", protectRoute, top);
 router.get("/new", protectRoute, newsort);
 
-router.post("/create", protectRoute, create);
+router.post("/create",protectRoute, create);
 router.get("/:id", protectRoute, getpost);
 
 router.post("/:id/vote", protectRoute, castvote);

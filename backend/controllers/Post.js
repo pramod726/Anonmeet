@@ -146,15 +146,14 @@ export const top = async (req, res) => {
 // 		res.status(500).json({ error: "Internal Server Error" });
 //     }
 // }
+
 export const create = async (req, res) => {
     try {
-        // Extracting necessary data from the request body
-        const { title, body } = req.body;
+        console.log(req.body)
+        const { title, description,image } = req.body;
+        
         const userid = req.user._id;
 
-        // console.log(req);
-
-        // Validating if title is provided
         if (!title) {
             return res.status(400).json({ error: "Title cannot be empty!" });
         }
@@ -165,18 +164,6 @@ export const create = async (req, res) => {
             return res.status(400).json({ error: "User does not exist." });
         }
 
-        // Uploading image to Cloudinary if provided
-        let imageUrl = ''; // Initialize imageUrl
-
-        // if (req.files) {
-        //     console.log(req.files);
-        //     // Upload the image to Cloudinary
-        //     const cloudinaryResponse = await uploadImageToCloudinary(req.files, process.env.FOLDER_NAME); // Assuming req.file contains the image file
-        //     imageUrl = cloudinaryResponse.secure_url; // Get the secure URL of the uploaded image
-        // }
-
-        console.log(imageUrl);
-
         const date = new Date();
         const score = hotScore(60, 40, date.getTime());
 
@@ -184,9 +171,9 @@ export const create = async (req, res) => {
         const post = await Post.create({
             username: userid,
             title,
-            body,
+            body:description,
             score,
-            imageUrl, // Assigning the Cloudinary image URL to the imageUrl field
+            image,
         });
 
         // Returning the newly created post details
@@ -194,8 +181,7 @@ export const create = async (req, res) => {
             username: userid,
             title,
             body,
-            imageUrl,
-            score: post.score // Assuming score is calculated elsewhere in your code
+            image
         });
 
     } catch (error) {

@@ -19,6 +19,7 @@ import { LuBookmark } from "react-icons/lu";
 export default function RecipeReviewCard({ post }) {
 
   const [votes, setVotes] = useState(post.votes);
+  console.log(post.image)
 
   const handleVote = async (voteType) => {
     try {
@@ -82,12 +83,12 @@ export default function RecipeReviewCard({ post }) {
           {post.body}
         </Typography>
       </CardContent>
-      {/* <CardMedia
+      {post.imgurl && <CardMedia
         component="img"
         height="194"
         image={post.imgurl}
         alt="Paella dish"
-      /> */}
+      />}
       <CardActions className='flex justify-between mx-1' >
         <div className='flex gap-1'>
           <div className='bg-[#2b2b2e] flex justify-around rounded-2xl p-0'>
