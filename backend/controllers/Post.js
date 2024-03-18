@@ -116,8 +116,9 @@ export const top = async (req, res) => {
 
 export const create = async (req, res) => {
     try {
+        console.log(req.body)
+        const { title, description,image } = req.body;
         
-        const { title, body } = req.body;
         const userid = req.user._id;
 
         // console.log(req);
@@ -133,19 +134,15 @@ export const create = async (req, res) => {
             return res.status(400).json({ error: "User does not exist." });
         }
 
-        let imageUrl = ''; 
-
-        console.log(imageUrl);
-
         const date = new Date();
         const score = hotScore(60, 40, date.getTime());
 
         const post = await Post.create({
             username: userid,
             title,
-            body,
+            body:description,
             score,
-            imageUrl, // Assigning the Cloudinary image URL to the imageUrl field
+            image,
         });
 
         
@@ -153,7 +150,7 @@ export const create = async (req, res) => {
             username: userid,
             title,
             body,
-            imageUrl,
+            image
         });
 
     } catch (error) {
