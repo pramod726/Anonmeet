@@ -36,6 +36,7 @@ const PostPage = () => {
             });
             
             const data = await response.json();
+            console.log(data);
             setPost(data);
             setComments(data.comments);
           } catch (error) {

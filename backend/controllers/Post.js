@@ -114,78 +114,32 @@ export const top = async (req, res) => {
 }
 
 
-// export const create = async (req,res) => {
-//     try{
-//         const {title, body } = req.body;
-//         const userid = req.user._id; 
-//         if(!title){
-//             return res.status(400).json({ error: "Title cannot be empty!" });
-//         }
-
-//         const user = await User.findOne({_id:userid});
-//         if(!user){
-//             return res.status(400).json({ error: "User does not exist." });
-//         }
-//         const date = new Date();
-//         const score = hotScore(60, 40, date.getTime());
-
-//         const username = userid;
-
-//         const post = await Post.create({
-//             username,
-//             title,
-//             body,
-//             score,
-//         });
-
-//         res.status(201).json({
-//             username: username,
-//             title: title,
-//             body: body,
-//             score: score
-//         });
-
-
-//     } catch (error){
-//         console.log("Error in signup controller", error.message);
-// 		res.status(500).json({ error: "Internal Server Error" });
-//     }
-// }
 export const create = async (req, res) => {
     try {
-        // Extracting necessary data from the request body
+        
         const { title, body } = req.body;
         const userid = req.user._id;
 
         // console.log(req);
 
-        // Validating if title is provided
+        
         if (!title) {
             return res.status(400).json({ error: "Title cannot be empty!" });
         }
 
-        // Finding the user by their ID
+        
         const user = await User.findOne({ _id: userid });
         if (!user) {
             return res.status(400).json({ error: "User does not exist." });
         }
 
-        // Uploading image to Cloudinary if provided
-        let imageUrl = ''; // Initialize imageUrl
-
-        // if (req.files) {
-        //     console.log(req.files);
-        //     // Upload the image to Cloudinary
-        //     const cloudinaryResponse = await uploadImageToCloudinary(req.files, process.env.FOLDER_NAME); // Assuming req.file contains the image file
-        //     imageUrl = cloudinaryResponse.secure_url; // Get the secure URL of the uploaded image
-        // }
+        let imageUrl = ''; 
 
         console.log(imageUrl);
 
         const date = new Date();
         const score = hotScore(60, 40, date.getTime());
 
-        // Creating a new post instance
         const post = await Post.create({
             username: userid,
             title,
@@ -194,13 +148,12 @@ export const create = async (req, res) => {
             imageUrl, // Assigning the Cloudinary image URL to the imageUrl field
         });
 
-        // Returning the newly created post details
+        
         res.status(201).json({
             username: userid,
             title,
             body,
             imageUrl,
-            score: post.score // Assuming score is calculated elsewhere in your code
         });
 
     } catch (error) {
@@ -243,19 +196,15 @@ export const getpost = async (req, res) => {
             return res.status(400).json({ error: "Post doesn't exist." });
         }
 
-        // const comment = await Comment.find({post: id}).populate("username", "username");
-        // const post1 = await data(post, userid);
-        // console.log(post1)
-        // const data1 = {
-        //     post: post1,
-        //     comment: comment
-        // };
-
         const comment = await Comment.find({post:post._id}).populate("username", "username profilePic");
         const vote = await Vote.findOne({username: userid, post: post._id});
-        let uservote = 0;
+        let uservote = 0, savestatus = 0;
         if(vote){
             uservote = vote.vote;
+        }
+        const save = await Save.findOne({username: userid, post: post._id});
+        if(save){
+            savestatus = 1;
         }
         const data = {
             _id: post._id,
@@ -269,6 +218,7 @@ export const getpost = async (req, res) => {
             comment: comment.length,
             comments: comment,
             selfvote: uservote,
+            saved: savestatus,
             createdAt: post.createdAt,
         }
 
