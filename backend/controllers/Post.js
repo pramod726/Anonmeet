@@ -278,6 +278,36 @@ export const getpost = async (req, res) => {
 }
 
 
+export const getuserpost = async (req, res) => {
+    try {
+
+        const userid = req.user._id;
+        const username = req.params.id;
+        const user = await User.findOne({username: username});
+        if(!user){
+            return res.status(400).json({message: "User doesn't exist"});
+        }
+        const posts = await Post.find({username: user._id})
+        .populate("username", "username profilePic")
+        .select("-score");
+
+        if(!posts){
+            return res.status(400).json({ error: "Post doesn't exist." });
+        }
+
+        const post = await data(posts, userid);
+
+        console.log(data);
+
+        res.status(201).json(post);
+
+    }catch (error){
+        console.log("Error in getuserpost controller", error.message);
+		res.status(500).json({ error: "Internal Server Error" });
+    }
+}
+
+
 export const comment = async (req, res) => {
     try{
         const id = req.params.id;

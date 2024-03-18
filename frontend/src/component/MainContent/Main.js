@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import Card from "./Card";
 
 export default function Main({ selectedItem }) {
@@ -37,11 +36,9 @@ export default function Main({ selectedItem }) {
       {Array.isArray(posts) && posts.length > 0 ? (
         posts.map((post) => (
           <div className="mt-3" key={post._id}>
-            <Link to={`/post/${post._id}`}>
               <div className='cursor-pointer'>
               <Card post={post} />
               </div>
-            </Link>
           </div>
         ))
       ) : (

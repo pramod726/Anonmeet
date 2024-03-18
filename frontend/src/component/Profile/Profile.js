@@ -67,8 +67,9 @@ export default function Profile() {
           </div>
         </div>
         <div className='flex flex-col items-center w-[25vw] h-screen'>
-          <div className='pic bg-red-500 border-1 border-[#9c9c9c40] w-40 h-40 rounded-[50%] mt-16 mb-4'>
-          </div>
+          {/* <div className='pic bg-red-500 border-1 border-[#9c9c9c40] w-40 h-40 rounded-[50%] mt-16 mb-4'> */}
+          <img src={chatUser.profilePic} alt="Profile" className="pic border-1 border-[#9c9c9c40] w-40 h-40 rounded-[50%] mt-16 mb-4" />
+          {/* </div> */}
           <div className="text-white font-semibold">{username}</div>
         </div>
       </div>

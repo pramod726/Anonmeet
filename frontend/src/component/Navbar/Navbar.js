@@ -6,10 +6,14 @@ import SignUpModal from '../Auth/SignUp';
 import { useAuthContext } from '../../ContextApis/AuthContext';
 import useLogout from '../../hooks/useLogout';
 import ProfileCard from './ProfileCard';
+import useGetConversations from "../../hooks/useGetConversations";
 
 const Navbar = () => {
+  const { conversations } = useGetConversations();
+  console.log(conversations)
   const navigate = useNavigate();
   const { authUser } = useAuthContext();
+  const [searchTerm, setSearchTerm] = useState('');
   const [loginOpen, setLoginOpen] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -25,7 +29,7 @@ const Navbar = () => {
   const handleLoginClose = () => {
     setLoginOpen(false);
   };
-  
+
   const handleSignupOpen = () => {
     setLoginOpen(false);
     setSignupOpen(true);
@@ -51,6 +55,13 @@ const Navbar = () => {
       window.location.reload();
     }
   }
+  var filteredConversations = []
+  if (searchTerm.length > 0) {
+    filteredConversations = conversations.filter(conversation =>
+      conversation.username.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
+
 
   useEffect(() => {
     const storedMessage = localStorage.getItem('successMessage');
@@ -91,10 +102,22 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-[60vh] px-4 py-2 rounded-3xl bg-gray-800 text-white placeholder-gray-400 focus:outline-none pl-10"
           />
           <FaSearch className="absolute left-3 top-3 text-gray-400 pointer-events-none" />
           <label htmlFor="search" className="sr-only">Search</label>
+          {/* Display filtered conversations */}
+          <div className="absolute left-0 right-0 top-full bg-white shadow rounded-b-lg mt-1 overflow-hidden">
+            {filteredConversations.map(conversation => (
+              <Link to={`/profile/${conversation.username}`} key={conversation.id} className="text-gray-800">
+                <div className="p-2 border-b border-gray-200 hover:bg-gray-100" onClick={() => setSearchTerm('')}>
+                  {conversation.username}
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {authUser ? (
@@ -124,8 +147,8 @@ const Navbar = () => {
           </div>
         )}
       </nav>
-      {loginOpen && <LoginModal open={loginOpen} handleClose={handleLoginClose} onSignupClick={handleSignupOpen}/>}
-      {signupOpen && <SignUpModal open={signupOpen} handleClose={handleSignupClose} onLoginClick={handleLoginOpen}/>}
+      {loginOpen && <LoginModal open={loginOpen} handleClose={handleLoginClose} onSignupClick={handleSignupOpen} />}
+      {signupOpen && <SignUpModal open={signupOpen} handleClose={handleSignupClose} onLoginClick={handleLoginOpen} />}
       {successMessage && (
         <div className='bg-green-500 text-white fixed bottom-10 right-10 p-4 rounded-md'>
           {successMessage}
