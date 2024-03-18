@@ -48,7 +48,7 @@ export default function Profile() {
   const username = chatUser.username;
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen ">
       <Navbar />
       <div className="flex justify-between overflow-hidden bg-black">
         <div>
@@ -56,17 +56,19 @@ export default function Profile() {
         </div>
         <div className='h-screen w-full flex-1'>
           <ProfileNav handlePropClick={handlePropClick} />
-          <div className='h-screen overflow-y-auto flex-col items-center'>
-          {posts && posts.map(post => (
-          <div className='mt-3' key={post._id}>
-            <Card post={post} />
+          <div className='h-screen overflow-y-auto'>
+          <div className="flex flex-col items-center pl-12"> 
+            {posts && posts.map(post => (
+              <div className='mt-3 ' key={post._id}style={{ width: '100%' }} >
+                <Card post={post} />
+              </div>
+            ))}
           </div>
-          ))}
           </div>
         </div>
         <div className='flex flex-col items-center w-[25vw] h-screen'>
           <div className='pic bg-red-500 border-1 border-[#9c9c9c40] w-40 h-40 rounded-[50%] mt-16 mb-4'>
-          </div>
+        </div>
           <div className="text-white font-semibold">{username}</div>
         </div>
       </div>

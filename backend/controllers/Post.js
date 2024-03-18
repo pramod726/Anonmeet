@@ -29,9 +29,13 @@ const data = async (posts, userid) =>{
     for(var i = 0; i< posts.length ; i++){
         const comment = await Comment.find({post:posts[i]._id});
         const vote = await Vote.findOne({username: userid, post: posts[i]._id});
-        let uservote = 0;
+        let uservote = 0, savestatus = 0;
         if(vote){
             uservote = vote.vote;
+        }
+        const save = await Save.findOne({username: userid, post: posts[i]._id});
+        if(save){
+            savestatus = 1;
         }
         const post = {
             _id: posts[i]._id,
@@ -44,6 +48,7 @@ const data = async (posts, userid) =>{
             votes: posts[i].upvotes - posts[i].downvotes,
             comment: comment.length,
             selfvote: uservote,
+            saved: savestatus,
             createdAt: posts[i].createdAt,
         }
 
@@ -381,15 +386,21 @@ export const deletevote = async (req, res) => {
             return res.status(400).json({ error: "Post doesn't exist." });
         }
         const alreadyvoted = await Vote.deleteOne({username: userid, post: postid});
-        if(!alreadyvoted){
+        if(alreadyvoted.deletedount == 0){
             return res.status(400).json({ error: "Vote doesn't exist." });
         }
 
+        console.log(vote);
+
         if(vote === 1){
-            post.upvotes -= 1;
+            post.upvotes = post.upvotes - 1;
         }else if(vote === -1){
-            post.downvotes -= 1;
+            post.downvotes = post.downvotes - 1;
         }
+
+        console.log(alreadyvoted);
+        console.log(post.upvotes);
+        console.log(post.downvotes);
 
         post.score = hotScore(post.upvotes, post.downvotes, post.createdAt.getTime());
 
@@ -477,6 +488,7 @@ export const savepost = async (req, res) => {
     try{
         const postid = req.params.id;
         const userid = req.user._id;
+        // console.log(postid);
         const post = await Post.findOne({_id: postid});
         if(!post){
             return res.status(400).json({ error: "Post doesn't exist." });
@@ -484,7 +496,7 @@ export const savepost = async (req, res) => {
 
         const save = await Save.create({
             username: userid, 
-            post: postid
+            post: post._id,
         });
 
         res.status(201).json(save);
@@ -500,6 +512,7 @@ export const deletesavepost = async (req, res) => {
     try{
         const postid = req.params.id;
         const userid = req.user._id;
+        // console.log(postid);
         const post = await Post.findOne({_id: postid});
         if(!post){
             return res.status(400).json({ error: "Post doesn't exist." });

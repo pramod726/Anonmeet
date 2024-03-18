@@ -12,7 +12,7 @@ router.post("/create", protectRoute, create);
 router.get("/:id", protectRoute, getpost);
 
 router.post("/:id/vote", protectRoute, castvote);
-router.delete("/:id/vote", protectRoute, deletevote);
+router.delete("/:id/deletevote", protectRoute, deletevote);
 router.post("/:id/comment", protectRoute, comment);
 
 router.post("/:id/save", protectRoute, savepost);

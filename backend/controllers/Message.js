@@ -72,3 +72,18 @@ export const getMessages = async (req, res) => {
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
+
+
+
+export const getallconversations = async (req, res) => {
+	try {
+	  const userid = req.user._id;
+  
+	  const conversations = await Conversation.find({participants: userid});
+  
+	  res.status(200).json(conversations);
+	} catch (error) {
+	  console.error("Error in getallconversation: ", error.message);
+	  res.status(500).json({ error: "Internal server error" });
+	}
+  }

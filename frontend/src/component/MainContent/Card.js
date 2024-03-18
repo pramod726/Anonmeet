@@ -1,4 +1,4 @@
-import { React, useState} from 'react';
+import { React, useState, useEffect} from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -14,34 +14,97 @@ import { TbArrowBigUp } from "react-icons/tb";
 import { TbArrowBigDown } from "react-icons/tb";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { LuBookmark } from "react-icons/lu";
+import { Link } from 'react-router-dom';
 
 
 export default function RecipeReviewCard({ post }) {
 
-  const [votes, setVotes] = useState(post.votes);
+  const [Vote, setVote] = useState(post.selfvote);
+  const [isSaved, setIsSaved] = useState(post.saved);
 
   const handleVote = async (voteType) => {
     try {
+      const newVote = Vote === voteType ? 0 : voteType;
+      const chatUser = JSON.parse(localStorage.getItem('chat-user'));
+      const token = chatUser.token;
+      
+      if(voteType !== Vote){
+        const response = await fetch(`http://localhost:8000/api/post/${post._id}/vote`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorisation': `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            vote: voteType
+          })
+        });
+        
+        if (!response.ok) {
+          const errorMessage = await response.json();
+          throw new Error(errorMessage.message);
+        }
+      }else{
+        const response = await fetch(`http://localhost:8000/api/post/${post._id}/deletevote`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorisation': `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            vote: voteType
+          })
+        });
+        
+        if (!response.ok) {
+          const errorMessage = await response.json();
+          throw new Error(errorMessage.message);
+        }
+      }
+      setVote(newVote);
+      
+    } catch (error) {
+      console.error("Error : ", error);
+    }
+  };
+
+
+  const handleSave = async () => {
+    try {
+      setIsSaved(prevState => !prevState);
       const chatUser = JSON.parse(localStorage.getItem('chat-user'));
       const token = chatUser.token;
 
-      const response = await fetch(`http://localhost:8000/api/post/${post._id}/vote`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorisation': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          vote: voteType
-        })
-      });
-  
-      if (!response.ok) {
-        const errorMessage = await response.json();
-        throw new Error(errorMessage.message);
+      if (!isSaved) {
+        const response = await fetch(`http://localhost:8000/api/post/${post._id}/save`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorisation': `Bearer ${token}`,
+          },
+        });
+    
+        if (!response.ok) {
+          const errorMessage = await response.json();
+          throw new Error(errorMessage.message);
+        }
+      } else {
+        const response = await fetch(`http://localhost:8000/api/post/${post._id}/deletesave`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorisation': `Bearer ${token}`,
+          },
+        });
+    
+        if (!response.ok) {
+          const errorMessage = await response.json();
+          throw new Error(errorMessage.message);
+        }
       }
+
+      
   
-      // If vote successful, update the state or handle response accordingly
     } catch (error) {
       console.error("Error : ", error);
     }
@@ -73,7 +136,11 @@ export default function RecipeReviewCard({ post }) {
         //     <MoreVertIcon />
         //   </IconButton>
         // }
-        title={<Typography variant="h8" color="white">{post.username}</Typography>}
+        title={<Typography variant="h8" color="white">
+          <Link to={`/profile/${post.username}`}>
+            {post.username}
+          </Link>
+          </Typography>}
         subheader={<Typography variant="subtitle2" color="white">{createdAgo}</Typography>}
       />
       <CardContent className='pt-2'>
@@ -92,11 +159,11 @@ export default function RecipeReviewCard({ post }) {
         <div className='flex gap-1'>
           <div className='bg-[#2b2b2e] flex justify-around rounded-2xl p-0'>
             <IconButton aria-label="Upvote" onClick={() => handleVote(1)}>
-              <TbArrowBigUp  color={post.selfvote === 1 ? 'green' : '#fff'} size={16}/>
+              <TbArrowBigUp  color={Vote === 1 ? 'green' : '#fff'} size={16}/>
             </IconButton>
             <div className='items-center py-1 text-cyan-50 text-[14px]'>{post.votes}</div>
             <IconButton aria-label="Downvote" onClick={() => handleVote(-1)}>
-              <TbArrowBigDown color={post.selfvote === -1 ? 'red' : '#fff'} size={16}/>
+              <TbArrowBigDown color={Vote === -1 ? 'red' : '#fff'} size={16}/>
             </IconButton>
           </div>
           <div className='bg-[#2b2b2e] flex justify-evenly rounded-2xl p-0'>
@@ -107,8 +174,8 @@ export default function RecipeReviewCard({ post }) {
           </div>
         </div>
         <div className=''>
-          <IconButton aria-label="Save">
-            <LuBookmark color='#fff' size={18} />
+          <IconButton aria-label="Save" onClick={handleSave}>
+            <LuBookmark color={isSaved ? 'blue' : '#fff'} size={18} />
           </IconButton>
         </div>
       </CardActions>
