@@ -234,23 +234,80 @@ export const deletepost = async (req, res) => {
 
 export const getpost = async (req, res) => {
     try{
+        const userid = req.user._id;
         const id = req.params.id;
-        const post = await Post.findOne({_id: id}).populate("username", "username").exec();
+        const post = await Post.findOne({_id: id})
+        .populate("username", "username profilePic")
+        .select("-score");
         if(!post){
             return res.status(400).json({ error: "Post doesn't exist." });
         }
 
-        const comment = await Comment.find({post: id}).populate("username", "username");
+        // const comment = await Comment.find({post: id}).populate("username", "username");
+        // const post1 = await data(post, userid);
+        // console.log(post1)
+        // const data1 = {
+        //     post: post1,
+        //     comment: comment
+        // };
 
+        const comment = await Comment.find({post:post._id}).populate("username", "username profilePic");
+        const vote = await Vote.findOne({username: userid, post: post._id});
+        let uservote = 0;
+        if(vote){
+            uservote = vote.vote;
+        }
         const data = {
-            post: post,
-            comment: comment
-        };
+            _id: post._id,
+            user_id: post.username._id,
+            username: post.username.username,
+            profilePic: post.username.profilePic,
+            title: post.title,
+            body: post.body,
+            imgurl: post.image,
+            votes: post.upvotes - post.downvotes,
+            comment: comment.length,
+            comments: comment,
+            selfvote: uservote,
+            createdAt: post.createdAt,
+        }
+
+        console.log(data);
 
         res.status(201).json(data);
 
     }catch (error){
         console.log("Error in post controller", error.message);
+		res.status(500).json({ error: "Internal Server Error" });
+    }
+}
+
+
+export const getuserpost = async (req, res) => {
+    try {
+
+        const userid = req.user._id;
+        const username = req.params.id;
+        const user = await User.findOne({username: username});
+        if(!user){
+            return res.status(400).json({message: "User doesn't exist"});
+        }
+        const posts = await Post.find({username: user._id})
+        .populate("username", "username profilePic")
+        .select("-score");
+
+        if(!posts){
+            return res.status(400).json({ error: "Post doesn't exist." });
+        }
+
+        const post = await data(posts, userid);
+
+        console.log(data);
+
+        res.status(201).json(post);
+
+    }catch (error){
+        console.log("Error in getuserpost controller", error.message);
 		res.status(500).json({ error: "Internal Server Error" });
     }
 }
@@ -273,14 +330,14 @@ export const comment = async (req, res) => {
 
         const comment = await Comment.create({
             post: id,
-            username: username,
+            username: user,
             text: text,
         });
 
         res.status(201).json(comment);
 
     }catch (error){
-        console.log("Error in signup controller", error.message);
+        console.log("Error in post controller", error.message);
 		res.status(500).json({ error: "Internal Server Error" });
     }
 }

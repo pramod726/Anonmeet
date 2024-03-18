@@ -1,5 +1,5 @@
 import express from "express";
-import { castvote, comment, create, createreply, deletecomment, deletepost, deletereply, deletesavepost, deletevote, getpost, hot, newsort, savepost, top } from "../controllers/Post.js";
+import { castvote, comment, create, createreply, deletecomment, deletepost, deletereply, deletesavepost, deletevote, getpost, getuserpost, hot, newsort, savepost, top } from "../controllers/Post.js";
 import protectRoute from "../middlewares/RouteProtector.js";
 
 const router = express.Router();
@@ -10,6 +10,8 @@ router.get("/new", protectRoute, newsort);
 
 router.post("/create", protectRoute, create);
 router.get("/:id", protectRoute, getpost);
+
+router.get("/:id/posts", protectRoute, getuserpost);
 
 router.post("/:id/vote", protectRoute, castvote);
 router.delete("/:id/deletevote", protectRoute, deletevote);

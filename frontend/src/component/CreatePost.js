@@ -6,7 +6,7 @@ export default function CreatePost() {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        image: null // Store image file
+        image: null
     });
 
     const handleChange = (e) => {
@@ -14,7 +14,7 @@ export default function CreatePost() {
         if (name === 'image') {
             setFormData({
                 ...formData,
-                [name]: files[0] // Store the selected file
+                [name]: files[0]
             });
         } else {
             setFormData({

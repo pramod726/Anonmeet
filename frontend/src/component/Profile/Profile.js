@@ -58,17 +58,20 @@ export default function Profile() {
           <ProfileNav handlePropClick={handlePropClick} />
           <div className='h-screen overflow-y-auto'>
           <div className="flex flex-col items-center pl-12"> 
-            {posts && posts.map(post => (
+            {Array.isArray(posts) && posts.length > 0 ?(posts.map(post => (
               <div className='mt-3 ' key={post._id}style={{ width: '100%' }} >
                 <Card post={post} />
               </div>
-            ))}
+            ))):(
+            <p>No posts found</p>
+          )}
           </div>
           </div>
         </div>
         <div className='flex flex-col items-center w-[25vw] h-screen'>
-          <div className='pic bg-red-500 border-1 border-[#9c9c9c40] w-40 h-40 rounded-[50%] mt-16 mb-4'>
-        </div>
+          {/* <div className='pic bg-red-500 border-1 border-[#9c9c9c40] w-40 h-40 rounded-[50%] mt-16 mb-4'> */}
+          <img src={chatUser.profilePic} alt="Profile" className="pic border-1 border-[#9c9c9c40] w-40 h-40 rounded-[50%] mt-16 mb-4" />
+          {/* </div> */}
           <div className="text-white font-semibold">{username}</div>
         </div>
       </div>
