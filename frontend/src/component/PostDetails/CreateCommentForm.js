@@ -16,7 +16,7 @@ const CreateCommentForm = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorisation': `Bearer ${token}`,
         },
         body: JSON.stringify({
           text,
