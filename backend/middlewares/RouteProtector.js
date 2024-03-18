@@ -3,7 +3,8 @@ import User from "../models/User.js";
 
 const protectRoute = async (req, res, next) => {
 	try {
-		console.log(req.headers)
+
+
 		const token = req.headers["authorisation"].split("Bearer ")[1] || req.cookies.jwt;
 
 		// console.log(token);
@@ -14,7 +15,7 @@ const protectRoute = async (req, res, next) => {
 
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-		// console.log(decoded);
+		console.log(decoded);
 
 		if (!decoded) {
 			return res.status(401).json({ error: "Unauthorized - Invalid Token" });
