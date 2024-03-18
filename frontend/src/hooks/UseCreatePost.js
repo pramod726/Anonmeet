@@ -6,30 +6,32 @@ const createPostUrl = "api/post/create";
 
 const UseCreatePost = async (data) => {
   const { title, description, image } = data;
-  
+
   const success = handleInputErrors({ title });
   if (!success) return;
-  
-  const formData = new FormData();
-  formData.append("title", title);
-  formData.append("body", description);
-  if (image) {
-    formData.append("image", image);
-  }
 
+  const postData = {
+    title,
+    description,
+    image
+  };
   try {
     const chatUser = JSON.parse(localStorage.getItem('chat-user'));
     const token = chatUser.token;
-    const response = await axios.post(`${serverUrl}${createPostUrl}`, formData, {
+    console.log(postData)
+    const response = await axios.post(`${serverUrl}${createPostUrl}`, postData, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         'Authorisation': `Bearer ${token}`,
       }
     });
+
+    console.log(response.data);
+    
     return response.data;
   } catch (error) {
+    console.error(error);
     const message = error.response ? error.response.data.message : error.message;
-    toast.error(message);
     return { success: false, message };
   }
 };
