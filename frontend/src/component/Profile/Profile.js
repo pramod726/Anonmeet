@@ -57,11 +57,13 @@ export default function Profile() {
         <div className='h-screen w-full flex-1'>
           <ProfileNav handlePropClick={handlePropClick} />
           <div className='h-screen overflow-y-auto flex-col items-center'>
-          {posts && posts.map(post => (
+          {Array.isArray(posts) && posts.length > 0 ?(posts.map(post => (
           <div className='mt-3' key={post._id}>
             <Card post={post} />
           </div>
-          ))}
+          ))):(
+            <p>No posts found</p>
+          )}
           </div>
         </div>
         <div className='flex flex-col items-center w-[25vw] h-screen'>

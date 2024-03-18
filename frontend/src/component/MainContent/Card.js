@@ -61,7 +61,7 @@ export default function RecipeReviewCard({ post }) {
   const createdAgo = ageInHours<24?ageInHours+" hr. ago":ageInDays+` ${ageInDays<=1?"day":"days"} ago`;
 
   return (
-    <Card sx={{ maxWidth: 760, backgroundColor: '#202020' }}> {/* Setting dark background color */}
+    <Card sx={{ maxWidth: 760, backgroundColor: '#202020' }}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe">

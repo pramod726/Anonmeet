@@ -99,7 +99,7 @@ const Navbar = () => {
 
         {authUser ? (
           <div className='flex items-center relative'>
-            <Link to="/post" className="text-white mx-2">
+            <Link to="/create-post" className="text-white mx-2">
               <FaPlus className="inline-block mr-1" /> Create Post
             </Link>
             <Link to="/chat" className="text-white mx-2">
