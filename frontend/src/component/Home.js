@@ -5,7 +5,7 @@ import Sidebar from './Sidebar';
 import Main from './MainContent/Main';
 
 export default function Home() {
-  const [selectedItem, setSelectedItem] = useState('hot');
+  const [selectedItem, setSelectedItem] = useState('home');
 
   const handleItemClick = (itemName) => {
     setSelectedItem(itemName);

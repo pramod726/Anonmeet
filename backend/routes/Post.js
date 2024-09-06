@@ -6,6 +6,7 @@ import protectRoute from "../middlewares/RouteProtector.js";
 
 const router = express.Router();
 
+router.get("/home", protectRoute, hot);
 router.get("/hot", protectRoute, hot);
 router.get("/top", protectRoute, top);
 router.get("/new", protectRoute, newsort);

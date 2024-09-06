@@ -86,7 +86,6 @@ function Login({ open, handleClose,onSignupClick,}) {
                 id="username"
                 label="User Name"
                 name="username"
-                InputProps={{ style: { color: 'white' } }}
                 autoFocus
               />
               <TextField

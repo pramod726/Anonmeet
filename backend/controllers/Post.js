@@ -149,7 +149,7 @@ export const create = async (req, res) => {
         res.status(201).json({
             username: userid,
             title,
-            body,
+            body:description,
             image
         });
 

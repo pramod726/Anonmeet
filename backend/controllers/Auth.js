@@ -49,13 +49,14 @@ export const signup = async (req, res) => {
 		});
 
 		if (newUser) {
-			generateTokenAndSetCookie(newUser._id, res);
+			const token = generatetoken(newUser._id);
 			await newUser.save();
 
 			res.status(201).json({
 				_id: newUser._id,
 				username: newUser.username,
 				profilePic: newUser.profilePic,
+				token: token,
 			});
 		} else {
 			res.status(400).json({ error: "Invalid user data" });
